@@ -56,7 +56,7 @@ const CustomSettings = () => {
                 <CustomSettingsColumn>
                     <CustomSettingsItem>
                         <RadioSwitcher id="getActivityByType" type="radio" name="setting" value="getActivityByType" />
-                        <label for="getActivityByType"><span></span>Activity by type</label>
+                        <label htmlFor="getActivityByType"><span></span>Activity by type</label>
                         <Select>
                             <option>Education</option>
                             <option>Recreational</option>
@@ -71,25 +71,25 @@ const CustomSettings = () => {
                     </CustomSettingsItem>
                     <CustomSettingsItem>
                         <RadioSwitcher id="getActivityByPrice" type="radio" name="setting" value="getActivityByPrice" />
-                        <label for="getActivityByPrice"><span></span>Activity by price</label>
+                        <label htmlFor="getActivityByPrice"><span></span>Activity by price</label>
                     </CustomSettingsItem>
                     <CustomSettingsItem>
                         <RadioSwitcher id="getActivityByPriceRange" type="radio" name="setting" value="getActivityByPriceRange" />
-                        <label for="getActivityByPriceRange"><span></span>Activity by price range</label>
+                        <label htmlFor="getActivityByPriceRange"><span></span>Activity by price range</label>
                     </CustomSettingsItem>
                 </CustomSettingsColumn>
                 <CustomSettingsColumn>
                     <CustomSettingsItem>
                         <RadioSwitcher id="getActivityByNumberOfParticipants" type="radio" name="setting" value="getActivityByNumberOfParticipants" />
-                        <label for="getActivityByNumberOfParticipants"><span></span>Activity by number of participants</label>
+                        <label htmlFor="getActivityByNumberOfParticipants"><span></span>Activity by number of participants</label>
                     </CustomSettingsItem>
                     <CustomSettingsItem>
                         <RadioSwitcher id="getActivityByAccessibility" type="radio" name="setting" value="getActivityByAccessibility" />
-                        <label for="getActivityByAccessibility"><span></span>Activity by accessibility</label>
+                        <label htmlFor="getActivityByAccessibility"><span></span>Activity by accessibility</label>
                     </CustomSettingsItem>
                     <CustomSettingsItem>
                         <RadioSwitcher id="getActivityByAccessibilityRange" type="radio" name="setting" value="getActivityByAccessibilityRange" />
-                        <label for="getActivityByAccessibilityRange"><span></span>Activity by accessibility range</label>
+                        <label htmlFor="getActivityByAccessibilityRange"><span></span>Activity by accessibility range</label>
                     </CustomSettingsItem>
                 </CustomSettingsColumn>
             </CustomSettingsContainer>
