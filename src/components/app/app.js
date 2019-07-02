@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import styled from 'styled-components';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import StoreContext from '../store-context';
-import { mainMenuInitialState, updateMainMenuReducer } from '../../store';
+import { mainMenuInitialState, updateMainMenuReducer, customSettingsInitialState, updateCustomSettingsReducer } from '../../store';
 
 import Header from '../header/header';
 import Footer from '../footer/footer';
@@ -11,10 +11,11 @@ import AboutPage from '../pages/about-page';
 import Page404 from '../pages/page-404';
 
 const App = () => {
-  const [ state, dispatch ] = useReducer(updateMainMenuReducer, mainMenuInitialState);
+  const [ mainMenuState, mainMenuDispatch ] = useReducer(updateMainMenuReducer, mainMenuInitialState);
+  const [ customSettingsState, customSettingsDispatch ] = useReducer(updateCustomSettingsReducer, customSettingsInitialState);
 
   return (
-    <StoreContext.Provider value={{ dispatch, state }}>
+    <StoreContext.Provider value={{ mainMenuDispatch, mainMenuState, customSettingsState, customSettingsDispatch }}>
       <Router>
         <Main>
             <Header />

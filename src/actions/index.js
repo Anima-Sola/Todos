@@ -1,10 +1,5 @@
-const setActiveMainMenuItem = (itemId) => {
-    return {
-        type: 'SET_ACTIVE_MAIN_MENU_ITEM',
-        payload: itemId
-    };
-};
+import setActiveMainMenuItem from './main-menu-actions';
 
-export  {
+export {
     setActiveMainMenuItem
 };

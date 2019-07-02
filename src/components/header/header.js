@@ -5,16 +5,16 @@ import StoreContext from '../store-context';
 import { setActiveMainMenuItem } from '../../actions';
 
 const Header = () => {
-    const { state, dispatch } = useContext(StoreContext);
+    const { mainMenuState, mainMenuDispatch } = useContext(StoreContext);
   
-    const styledItems = state.map(
+    const styledItems = mainMenuState.map(
     
         (item) => {
             const { id, title, active, link } = item;
             const isSelectedStyles = active ? {fontWeight: 600, color: '#fff'} : {};
             return (
                 <MainMenuItem key={id}>
-                    <Link to={link} style={isSelectedStyles} onClick={() => dispatch(setActiveMainMenuItem(id))}>{title}</Link>
+                    <Link to={link} style={isSelectedStyles} onClick={() => mainMenuDispatch(setActiveMainMenuItem(id))}>{title}</Link>
                 </MainMenuItem>
             );
         }
@@ -37,6 +37,7 @@ const Header = () => {
     );
 }
 
+// Header styles
 const HeaderContainer = styled.header`
     width: 100%;
     border-bottom: 1px solid #fff;
@@ -85,7 +86,6 @@ const MainMenuItem = styled.li`
         color: #fff;
 
         &:hover {
-            //color: #8CC6F6;
             text-decoration: underline;
         }
     }

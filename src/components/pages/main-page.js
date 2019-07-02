@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import Spinner from '../spinner';
 import BoredApiService from '../../services/bored-api-service';
 import tick from './tick.png';
+import StoreContext from '../store-context';
 
 const boredApiService = new BoredApiService();
 
@@ -10,7 +11,7 @@ const MainPage = () => {
 
     const [isLoading, setLoadingStatus] = useState(true);
     const [loadedActivity, setLoadedActivity] = useState({});
-
+    
     useEffect(() => {
 
         if(isLoading) {
@@ -47,6 +48,7 @@ const MainPage = () => {
 }
 
 const CustomSettings = () => {
+    const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     
     return (
         
