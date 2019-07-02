@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import StoreContext from '../store-context';
+import { setActiveMainMenuItem } from '../../actions';
 
-const Header = ({ mainMenuItems, setActiveMainMenuItem }) => {
-    
-    const styledItems = mainMenuItems.map(
+const Header = () => {
+    const { state, dispatch } = useContext(StoreContext);
+  
+    const styledItems = state.map(
     
         (item) => {
             const { id, title, active, link } = item;
             const isSelectedStyles = active ? {fontWeight: 600, color: '#fff'} : {};
             return (
                 <MainMenuItem key={id}>
-                    <Link to={link} style={isSelectedStyles} onClick={() => setActiveMainMenuItem(id)}>{title}</Link>
+                    <Link to={link} style={isSelectedStyles} onClick={() => dispatch(setActiveMainMenuItem(id))}>{title}</Link>
                 </MainMenuItem>
             );
         }
@@ -36,13 +37,8 @@ const Header = ({ mainMenuItems, setActiveMainMenuItem }) => {
     );
 }
 
-const mapStateToProps = (state) => {
-    return state;
-}
-
 const HeaderContainer = styled.header`
     width: 100%;
-    //background-color: #349AED;
     border-bottom: 1px solid #fff;
     height: 60px;
 `;
@@ -95,4 +91,4 @@ const MainMenuItem = styled.li`
     }
 `;
 
-export default connect(mapStateToProps, actions)(Header);
+export default Header;
