@@ -4,10 +4,20 @@ import Spinner from '../spinner';
 import BoredApiService from '../../services/bored-api-service';
 import tick from './tick.png';
 import StoreContext from '../store-context';
+import { setSelectedTypeOfAction } from '../../actions';
 
 const boredApiService = new BoredApiService();
 
 const MainPage = () => {
+    return (
+        <div>
+            <LoadedActivityContainer />
+            <CustomSettings />
+        </div>
+    );
+}
+
+const LoadedActivityContainer = () => {
 
     const [isLoading, setLoadingStatus] = useState(true);
     const [loadedActivity, setLoadedActivity] = useState({});
@@ -42,63 +52,117 @@ const MainPage = () => {
                 <Button>Get custom activity</Button>
                 <Button>Archive activity</Button>
             </ButtonsContainer>
-            <CustomSettings />
         </div>
     );
 }
 
-const CustomSettings = () => {
-    const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
+const ShowLoadedActivity = ({ loadedActivity }) => {
     
     return (
-        
+        <div>
+            <LoadedActivity>{loadedActivity.activity}</LoadedActivity>
+            <ActivityDetails>
+                <span>Accessibility: {loadedActivity.accessibility}</span>
+                <span>Participants: {loadedActivity.participants}</span>
+                <span>Price: {loadedActivity.price}</span>
+                <span>Type: {loadedActivity.type}</span>
+            </ActivityDetails>
+        </div>
+    );
+
+}
+
+const CustomSettings = () => {    
+    return (
         <div>
             <CustomTitle><span>Custom activity settings</span></CustomTitle>
             <CustomSettingsContainer>   
                 <CustomSettingsColumn>
-                    <CustomSettingsItem>
-                        <RadioSwitcher id="getActivityByType" type="radio" name="setting" value="getActivityByType" />
-                        <label htmlFor="getActivityByType"><span></span>Activity by type</label>
-                        <Select>
-                            <option>Education</option>
-                            <option>Recreational</option>
-                            <option>Social</option>
-                            <option>DIY</option>
-                            <option>Charity</option>
-                            <option>Cooking</option>
-                            <option>Relaxation</option>
-                            <option>Music</option>
-                            <option>Busywork</option>
-                        </Select>
-                    </CustomSettingsItem>
-                    <CustomSettingsItem>
-                        <RadioSwitcher id="getActivityByPrice" type="radio" name="setting" value="getActivityByPrice" />
-                        <label htmlFor="getActivityByPrice"><span></span>Activity by price</label>
-                    </CustomSettingsItem>
-                    <CustomSettingsItem>
-                        <RadioSwitcher id="getActivityByPriceRange" type="radio" name="setting" value="getActivityByPriceRange" />
-                        <label htmlFor="getActivityByPriceRange"><span></span>Activity by price range</label>
-                    </CustomSettingsItem>
+                    <ActivityByTypeSetting id={0} />
+                    <ActivityByPriceSetting id={1} />
+                    <ActivityByPriceRangeSetting id={2} />
                 </CustomSettingsColumn>
                 <CustomSettingsColumn>
-                    <CustomSettingsItem>
-                        <RadioSwitcher id="getActivityByNumberOfParticipants" type="radio" name="setting" value="getActivityByNumberOfParticipants" />
-                        <label htmlFor="getActivityByNumberOfParticipants"><span></span>Activity by number of participants</label>
-                    </CustomSettingsItem>
-                    <CustomSettingsItem>
-                        <RadioSwitcher id="getActivityByAccessibility" type="radio" name="setting" value="getActivityByAccessibility" />
-                        <label htmlFor="getActivityByAccessibility"><span></span>Activity by accessibility</label>
-                    </CustomSettingsItem>
-                    <CustomSettingsItem>
-                        <RadioSwitcher id="getActivityByAccessibilityRange" type="radio" name="setting" value="getActivityByAccessibilityRange" />
-                        <label htmlFor="getActivityByAccessibilityRange"><span></span>Activity by accessibility range</label>
-                    </CustomSettingsItem>
+                    <ActivityByNumberOfParticipantsSetting id={3} />
+                    <ActivityByAccessibilitySetting id={4} />
+                    <ActivityByAccessibilityRangeSetting id={5} />
                 </CustomSettingsColumn>
             </CustomSettingsContainer>
         </div>
-
     );
+}
 
+const ActivityByTypeSetting = ({ id }) => {
+    const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
+    const { selectedActivityId, activities, activityTypes } = customSettingsState;
+
+    const isChecked = (selectedActivityId === id);
+    const opacity = isChecked ? {opacity: 1} : {};
+    
+    const getActivityTypeList = () => {
+        return activityTypes.map(( type ) => {
+            return <option selected={ (type === activities[id].type) }>{ type }</option>
+        });
+    }
+    
+    return (
+        <CustomSettingsItem style={opacity}>
+            <RadioSwitcher id={activities[id].setting} type="radio" name="setting" checked={isChecked} />
+            <label htmlFor={activities[id].setting}><span></span>{activities[id].title}</label>
+            <Select disabled={!isChecked}>
+                {getActivityTypeList()}
+            </Select>
+        </CustomSettingsItem>
+    );
+}
+
+const ActivityByPriceSetting = ({ id }) => {
+    const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
+    const { selectedActivityId, activities } = customSettingsState;
+    const opacity = (selectedActivityId === id) ? {opacity: 1} : {};
+
+    return (
+        <CustomSettingsItem style={opacity}>
+            <RadioSwitcher id="getActivityByPrice" type="radio" name="setting" />
+            <label htmlFor="getActivityByPrice"><span></span>Activity by price</label>
+        </CustomSettingsItem>
+    );   
+}
+
+const ActivityByPriceRangeSetting = () => {
+    return (
+        <CustomSettingsItem>
+            <RadioSwitcher id="getActivityByPriceRange" type="radio" name="setting" />
+            <label htmlFor="getActivityByPriceRange"><span></span>Activity by price range</label>
+        </CustomSettingsItem>
+    );
+}
+
+const ActivityByNumberOfParticipantsSetting = () => {
+    return (
+        <CustomSettingsItem>
+            <RadioSwitcher id="getActivityByNumberOfParticipants" type="radio" name="setting" />
+            <label htmlFor="getActivityByNumberOfParticipants"><span></span>Activity by number of participants</label>
+        </CustomSettingsItem>
+    );
+}
+
+const ActivityByAccessibilitySetting = () => {
+    return (
+        <CustomSettingsItem>
+            <RadioSwitcher id="getActivityByAccessibility" type="radio" name="setting" />
+            <label htmlFor="getActivityByAccessibility"><span></span>Activity by accessibility</label>
+        </CustomSettingsItem>
+    );
+}
+
+const ActivityByAccessibilityRangeSetting = () => {
+    return (
+        <CustomSettingsItem>
+            <RadioSwitcher id="getActivityByAccessibilityRange" type="radio" name="setting" />
+            <label htmlFor="getActivityByAccessibilityRange"><span></span>Activity by accessibility range</label>
+        </CustomSettingsItem>
+    );
 }
 
 const CustomTitle = styled.span`
@@ -130,6 +194,7 @@ const CustomSettingsColumn = styled.div`
 const CustomSettingsItem = styled.div`
     width: 100%;
     margin-bottom: 30px;
+    opacity: 0.5;
 `;
 
 const RadioSwitcher = styled.input`
@@ -137,7 +202,6 @@ const RadioSwitcher = styled.input`
 
     & + label {
         cursor:pointer;
-        opacity: 0.5;
     }
 
     & + label span {
@@ -148,10 +212,6 @@ const RadioSwitcher = styled.input`
         vertical-align:middle;
         border: 1px solid #fff;
         border-radius: 2px;
-    }
-
-    :checked + label {
-        opacity: 1;
     }
     
     :checked + label span {
@@ -176,22 +236,6 @@ const Select = styled.select`
     }
 
 `;
-
-const ShowLoadedActivity = ({ loadedActivity }) => {
-    
-    return (
-        <div>
-            <LoadedActivity>{loadedActivity.activity}</LoadedActivity>
-            <ActivityDetails>
-                <span>Accessibility: {loadedActivity.accessibility}</span>
-                <span>Participants: {loadedActivity.participants}</span>
-                <span>Price: {loadedActivity.price}</span>
-                <span>Type: {loadedActivity.type}</span>
-            </ActivityDetails>
-        </div>
-    );
-
-}
 
 const ResultContainer = styled.div`
     margin: 20px 10%;
@@ -256,3 +300,32 @@ const Button = styled.button`
 `;
 
 export default MainPage;
+
+
+/*const RadioSwitcher = styled.input`
+    display: none;
+
+    & + label {
+        cursor:pointer;
+        opacity: 0.5;
+    }
+
+    & + label span {
+        display:inline-block;
+        width:35px;
+        height:35px;
+        margin: -3px 10px 0 0;
+        vertical-align:middle;
+        border: 1px solid #fff;
+        border-radius: 2px;
+    }
+
+    :checked + label {
+        opacity: 1;
+    }
+    
+    :checked + label span {
+        background: url(${tick}) no-repeat;
+    }
+
+`;*/

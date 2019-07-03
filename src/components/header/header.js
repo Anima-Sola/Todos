@@ -7,11 +7,11 @@ import { setActiveMainMenuItem } from '../../actions';
 const Header = () => {
     const { mainMenuState, mainMenuDispatch } = useContext(StoreContext);
   
-    const styledItems = mainMenuState.map(
+    const styledItems = mainMenuState.items.map(
     
         (item) => {
-            const { id, title, active, link } = item;
-            const isSelectedStyles = active ? {fontWeight: 600, color: '#fff'} : {};
+            const { id, title, link } = item;
+            const isSelectedStyles = (mainMenuState.selectedItemId === id) ? {fontWeight: 600, color: '#fff'} : {};
             return (
                 <MainMenuItem key={id}>
                     <Link to={link} style={isSelectedStyles} onClick={() => mainMenuDispatch(setActiveMainMenuItem(id))}>{title}</Link>
