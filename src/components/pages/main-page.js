@@ -4,7 +4,7 @@ import Spinner from '../spinner';
 import BoredApiService from '../../services/bored-api-service';
 import tick from './tick.png';
 import StoreContext from '../store-context';
-import { setSelectedTypeOfAction } from '../../actions';
+import { setSelectedTypeOfAction, setSelectedCustomActivity } from '../../actions';
 
 const boredApiService = new BoredApiService();
 
@@ -105,11 +105,20 @@ const ActivityByTypeSetting = ({ id }) => {
         });
     }
     
+    const setSelectedType = () => {
+        const select = document.getElementById('activity_type_select');
+        customSettingsDispatch(setSelectedTypeOfAction(select.value));
+    }
+    
+    const setCustomActivity = () => {
+        customSettingsDispatch(setSelectedCustomActivity(id));
+    }
+    
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={activities[id].setting} type="radio" name="setting" checked={isChecked} />
-            <label htmlFor={activities[id].setting}><span></span>{activities[id].title}</label>
-            <Select disabled={!isChecked}>
+            <RadioSwitcher id="activityByType" type="radio" name="setting" checked={isChecked} onClick={setCustomActivity}/>
+            <label htmlFor="activityByType"><span></span>Activity by type</label>
+            <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType}>
                 {getActivityTypeList()}
             </Select>
         </CustomSettingsItem>
@@ -118,48 +127,84 @@ const ActivityByTypeSetting = ({ id }) => {
 
 const ActivityByPriceSetting = ({ id }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
-    const { selectedActivityId, activities } = customSettingsState;
+    const { selectedActivityId } = customSettingsState;
     const opacity = (selectedActivityId === id) ? {opacity: 1} : {};
+
+    const setCustomActivity = () => {
+        customSettingsDispatch(setSelectedCustomActivity(id));
+    }
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id="getActivityByPrice" type="radio" name="setting" />
+            <RadioSwitcher id="getActivityByPrice" type="radio" name="setting" onClick={setCustomActivity} />
             <label htmlFor="getActivityByPrice"><span></span>Activity by price</label>
         </CustomSettingsItem>
     );   
 }
 
-const ActivityByPriceRangeSetting = () => {
+const ActivityByPriceRangeSetting = ({ id }) => {
+    const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
+    const { selectedActivityId } = customSettingsState;
+    const opacity = (selectedActivityId === id) ? {opacity: 1} : {};
+    
+    const setCustomActivity = () => {
+        customSettingsDispatch(setSelectedCustomActivity(id));
+    }
+
     return (
-        <CustomSettingsItem>
-            <RadioSwitcher id="getActivityByPriceRange" type="radio" name="setting" />
+        <CustomSettingsItem style={opacity}>
+            <RadioSwitcher id="getActivityByPriceRange" type="radio" name="setting" onClick={setCustomActivity}  />
             <label htmlFor="getActivityByPriceRange"><span></span>Activity by price range</label>
         </CustomSettingsItem>
     );
 }
 
-const ActivityByNumberOfParticipantsSetting = () => {
+const ActivityByNumberOfParticipantsSetting = ({ id }) => {
+    const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
+    const { selectedActivityId } = customSettingsState;
+    const opacity = (selectedActivityId === id) ? {opacity: 1} : {};
+
+    const setCustomActivity = () => {
+        customSettingsDispatch(setSelectedCustomActivity(id));
+    }
+
     return (
-        <CustomSettingsItem>
-            <RadioSwitcher id="getActivityByNumberOfParticipants" type="radio" name="setting" />
+        <CustomSettingsItem style={opacity}>
+            <RadioSwitcher id="getActivityByNumberOfParticipants" type="radio" name="setting" onClick={setCustomActivity} />
             <label htmlFor="getActivityByNumberOfParticipants"><span></span>Activity by number of participants</label>
         </CustomSettingsItem>
     );
 }
 
-const ActivityByAccessibilitySetting = () => {
+const ActivityByAccessibilitySetting = ({ id }) => {
+    const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
+    const { selectedActivityId } = customSettingsState;
+    const opacity = (selectedActivityId === id) ? {opacity: 1} : {};
+
+    const setCustomActivity = () => {
+        customSettingsDispatch(setSelectedCustomActivity(id));
+    }
+
     return (
-        <CustomSettingsItem>
-            <RadioSwitcher id="getActivityByAccessibility" type="radio" name="setting" />
+        <CustomSettingsItem style={opacity}>
+            <RadioSwitcher id="getActivityByAccessibility" type="radio" name="setting" onClick={setCustomActivity} />
             <label htmlFor="getActivityByAccessibility"><span></span>Activity by accessibility</label>
         </CustomSettingsItem>
     );
 }
 
-const ActivityByAccessibilityRangeSetting = () => {
+const ActivityByAccessibilityRangeSetting = ({ id }) => {
+    const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
+    const { selectedActivityId } = customSettingsState;
+    const opacity = (selectedActivityId === id) ? {opacity: 1} : {};
+
+    const setCustomActivity = () => {
+        customSettingsDispatch(setSelectedCustomActivity(id));
+    }
+
     return (
-        <CustomSettingsItem>
-            <RadioSwitcher id="getActivityByAccessibilityRange" type="radio" name="setting" />
+        <CustomSettingsItem style={opacity}>
+            <RadioSwitcher id="getActivityByAccessibilityRange" type="radio" name="setting" onClick={setCustomActivity} />
             <label htmlFor="getActivityByAccessibilityRange"><span></span>Activity by accessibility range</label>
         </CustomSettingsItem>
     );

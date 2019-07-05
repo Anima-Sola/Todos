@@ -3,8 +3,6 @@ const customSettingsInitialState = {
     activities: [
         {
             id: 0,
-            setting: 'activityByType',
-            title: 'Activity by type',
             type: 'Education'
         },
         {
@@ -57,7 +55,12 @@ const updateCustomSettingsReducer = (state = customSettingsInitialState, action)
 
     switch (action.type) {
         case 'SET_SELECTED_TYPE_OF_ACTION':
-            return state;
+            const activities = [...state.activities];
+            activities[0].type = action.payload;
+            return {...state, activities};
+
+        case 'SET_SELECTED_CUSTOM_ACTIVITY':
+            return { ...state, selectedActivityId: action.payload }
 
         default:
             return state;

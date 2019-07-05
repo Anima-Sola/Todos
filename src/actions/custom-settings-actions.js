@@ -5,4 +5,14 @@ const setSelectedTypeOfAction = (type) => {
     };
 };
 
-export default setSelectedTypeOfAction;
+const setSelectedCustomActivity = (id) => {
+    return {
+        type: 'SET_SELECTED_CUSTOM_ACTIVITY',
+        payload: id
+    };
+};
+
+export {
+    setSelectedTypeOfAction,
+    setSelectedCustomActivity
+};

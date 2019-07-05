@@ -1,7 +1,8 @@
 import setActiveMainMenuItem from './main-menu-actions';
-import setSelectedTypeOfAction from './custom-settings-actions';
+import { setSelectedTypeOfAction, setSelectedCustomActivity } from './custom-settings-actions';
 
 export {
     setActiveMainMenuItem,
-    setSelectedTypeOfAction
+    setSelectedTypeOfAction,
+    setSelectedCustomActivity
 };
