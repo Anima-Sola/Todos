@@ -3,39 +3,60 @@ const customSettingsInitialState = {
     activities: [
         {
             id: 0,
-            type: 'Education'
+            type: 'Education',
+            radioSwitcherId: 'activityByType',
+            CustomSettingTitle: 'Activity by type'
         },
         {
             id: 1,
-            setting: 'activityByPrice',
-            title: 'Activity by price',
-            value: 0.3
+            value: 10.05,
+            radioSwitcherId: 'getActivityByPrice',
+            CustomSettingTitle: 'Activity by price',
+            incValueAction: 'incPriceValueAction',
+            decValueAction: 'decPriceValueAction',
+            changingStep: 0.05
         },
         {
             id: 2,
-            setting: 'activityByPriceRange',
-            title: 'Activity by price range',
             lowerValue: 0,
-            higherValue: 0.3
+            higherValue: 0.3,
+            radioSwitcherId: 'getActivityByPriceRange',
+            CustomSettingTitle: 'Activity by price range',
+            incLowerValueAction: 'incLowerPriceValueAction',
+            decLowerValueAction: 'decLowerPriceValueAction',
+            incHigherValueAction: 'incHigherPriceValueAction',
+            decHigherValueAction: 'decHigherPriceValueAction',
+            changingStep: 0.05
         },
         {
             id: 3,
-            setting: 'activityByNumberOfParticipants',
-            title: 'Activity by number of participants',
-            value: 1
+            value: 1,
+            radioSwitcherId: 'getActivityByNumberOfParticipants',
+            CustomSettingTitle: 'Activity by number of participants',
+            incValueAction: 'incNumberOfParticipantsValueAction',
+            decValueAction: 'decNumberOfParticipantsValueAction',
+            changingStep: 1
         },
         {
             id: 4,
-            setting: 'activityByAccessibility',
-            title: 'Activity by accessibility',
-            value: 0.5
+            value: 0.5,
+            radioSwitcherId: 'getActivityByAccessibility',
+            CustomSettingTitle: 'Activity by accessibility',
+            incValueAction: 'incAccessibilityValueAction',
+            decValueAction: 'decAccessibilityValueAction',
+            changingStep: 0.01
         },
         {
             id: 5,
-            setting: 'activityByAccessibilityRange',
-            title: 'Activity by accessibility range',
             lowerValue: 0,
-            higherValue: 0.9
+            higherValue: 0.9,
+            radioSwitcherId: 'getActivityByAccessibilityRange',
+            CustomSettingTitle: 'Activity by accessibility range',
+            incLowerValueAction: 'incLowerAccessibilityValueAction',
+            decLowerValueAction: 'decLowerAccessibilityValueAction',
+            incHigherValueAction: 'incHigherAccessibilityValueAction',
+            decHigherValueAction: 'decHigherAccessibilityValueAction',
+            changingStep: 0.01
         }
     ],
     activityTypes: [
@@ -61,6 +82,14 @@ const updateCustomSettingsReducer = (state = customSettingsInitialState, action)
 
         case 'SET_SELECTED_CUSTOM_ACTIVITY':
             return { ...state, selectedActivityId: action.payload }
+
+        case 'INC_PRICE_VALUE':
+            console.log(action.id);
+            return;
+
+        case 'DEC_PRICE_VALUE':
+            console.log(action.id);
+            return;
 
         default:
             return state;

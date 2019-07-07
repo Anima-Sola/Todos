@@ -6,9 +6,9 @@ import { mainMenuInitialState, updateMainMenuReducer, customSettingsInitialState
 
 import Header from '../header/header';
 import Footer from '../footer/footer';
-import MainPage from '../pages/main-page';
-import AboutPage from '../pages/about-page';
-import Page404 from '../pages/page-404';
+import MainPage from '../pages/main-page/main-page';
+import AboutPage from '../pages/about-page/about-page';
+import Page404 from '../pages/page-404/page-404';
 
 const App = () => {
   const [ mainMenuState, mainMenuDispatch ] = useReducer(updateMainMenuReducer, mainMenuInitialState);
