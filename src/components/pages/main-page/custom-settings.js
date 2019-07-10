@@ -5,33 +5,26 @@ import tick from './tick.png';
 import { 
         setSelectedTypeOfAction,
         setSelectedCustomActivity,
-        incPriceValueAction,
-        decPriceValueAction,
-        incLowerPriceValueAction,
-        decLowerPriceValueAction,
-        incHigherPriceValueAction,
-        decHigherPriceValueAction,
-        incNumberOfParticipantsValueAction,
-        decNumberOfParticipantsValueAction,
-        incAccessibilityValueAction,
-        decAccessibilityValueAction,
-        incLowerAccessibilityValueAction,
-        decLowerAccessibilityValueAction,
-        incHigherAccessibilityValueAction,
-        decHigherAccessibilityValueAction 
+        incValueAction,
+        decValueAction,
+        incLowerValueAction,
+        decLowerValueAction,
+        incHigherValueAction,
+        decHigherValueAction
     } from '../../../actions';
 
-const SelectSetting = ({ id }) => {
+const SelectSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities, activityTypes } = customSettingsState;
 
-    const isChecked = (selectedActivityId === id);
+    const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? {opacity: 1} : {};
     const disabledStyles = isChecked ? {} : { cursor: 'default' };
     
     const getActivityTypeList = () => {
+        let key = 0;
         return activityTypes.map(( type ) => {
-            return <option selected={ (type === activities[id].type) }>{ type }</option>
+            return <option key={key++} selected={ (type === activities[activityId].type) }>{ type }</option>
         });
     }
     
@@ -41,13 +34,13 @@ const SelectSetting = ({ id }) => {
     }
     
     const setCustomActivity = () => {
-        customSettingsDispatch(setSelectedCustomActivity(id));
+        customSettingsDispatch(setSelectedCustomActivity(activityId));
     }
     
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={activities[id].radioSwitcherId} type="radio" name="setting" checked={isChecked} onClick={setCustomActivity}/>
-            <label htmlFor={activities[id].radioSwitcherId}><span></span>{activities[id].CustomSettingTitle}</label>
+            <RadioSwitcher id={activities[activityId].radioSwitcherId} type="radio" name="setting" checked={isChecked} onClick={setCustomActivity} readOnly />
+            <label htmlFor={activities[activityId].radioSwitcherId}><span></span>{activities[activityId].CustomSettingTitle}</label>
             <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType} style={disabledStyles} >
                 {getActivityTypeList()}
             </Select>
@@ -55,64 +48,80 @@ const SelectSetting = ({ id }) => {
     );
 }
 
-const SingleValueSetting = ({ id }) => {
+const SingleValueSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
     
-    const isChecked = (selectedActivityId === id);
+    const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? { opacity: 1 } : {};
     const Plus = isChecked ? <EnabledPlus>+</EnabledPlus> : <DisabledPlus>+</DisabledPlus>;
     const Minus = isChecked ? <EnabledMinus>-</EnabledMinus> : <DisabledMinus>-</DisabledMinus>;
 
     const setCustomActivity = () => {
-        customSettingsDispatch(setSelectedCustomActivity(id));
+        customSettingsDispatch(setSelectedCustomActivity(activityId));
     }
 
     const incValue = () => {
-        customSettingsDispatch(eval(activities[id].incValueAction(id)));
+        customSettingsDispatch(incValueAction(activityId));
     }
 
     const decValue = () => {
-        customSettingsDispatch(window[activities[id].decValueAction](id));
+        customSettingsDispatch(decValueAction(activityId));
     }
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={activities[id].radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} />
-            <label htmlFor={activities[id].radioSwitcherId}><span></span>{activities[id].CustomSettingTitle}</label>
+            <RadioSwitcher id={activities[activityId].radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} />
+            <label htmlFor={activities[activityId].radioSwitcherId}><span></span>{activities[activityId].CustomSettingTitle}</label>
             <ValueContainer>
                 <ValueButton onClick={decValue} disabled={!isChecked}>{Minus}</ValueButton>
-                <Value>{ activities[id].value }</Value>
+                <Value>{ activities[activityId].value }</Value>
                 <ValueButton onClick={incValue} disabled={!isChecked}>{Plus}</ValueButton>
             </ValueContainer>
         </CustomSettingsItem>
     );   
 }
 
-const RangeValuesSetting = ({ id }) => {
+const RangeValuesSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
 
-    const isChecked = (selectedActivityId === id);
+    const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? { opacity: 1 } : {};
     const Plus = isChecked ? <EnabledPlus>+</EnabledPlus> : <DisabledPlus>+</DisabledPlus>;
     const Minus = isChecked ? <EnabledMinus>-</EnabledMinus> : <DisabledMinus>-</DisabledMinus>;
     
     const setCustomActivity = () => {
-        customSettingsDispatch(setSelectedCustomActivity(id));
+        customSettingsDispatch(setSelectedCustomActivity(activityId));
+    }
+
+    const incLowerValue = () => {
+        customSettingsDispatch(incLowerValueAction(activityId));
+    }
+
+    const decLowerValue = () => {
+        customSettingsDispatch(decLowerValueAction(activityId));
+    }
+
+    const incHigherValue = () => {
+        customSettingsDispatch(incHigherValueAction(activityId));
+    }
+
+    const decHigherValue = () => {
+        customSettingsDispatch(decHigherValueAction(activityId));
     }
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={activities[id].radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity}  />
-            <label htmlFor={activities[id].radioSwitcherId}><span></span>{activities[id].CustomSettingTitle}</label>
+            <RadioSwitcher id={activities[activityId].radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity}  />
+            <label htmlFor={activities[activityId].radioSwitcherId}><span></span>{activities[activityId].CustomSettingTitle}</label>
             <ValueContainer>
-                <ValueButton>{Minus}</ValueButton>
-                <Value>{ activities[id].lowerValue }</Value>
-                <ValueButton>{Plus}</ValueButton>
-                <ValueButton>{Minus}</ValueButton>
-                <Value>{ activities[id].higherValue }</Value>
-                <ValueButton>{Plus}</ValueButton>
+                <ValueButton onClick={decLowerValue}>{Minus}</ValueButton>
+                <Value>{ activities[activityId].lowerValue }</Value>
+                <ValueButton onClick={incLowerValue }>{Plus}</ValueButton>
+                <ValueButton onClick={decHigherValue}>{Minus}</ValueButton>
+                <Value>{ activities[activityId].higherValue }</Value>
+                <ValueButton onClick={incHigherValue}>{Plus}</ValueButton>
             </ValueContainer>
         </CustomSettingsItem>
     );
@@ -124,14 +133,14 @@ const CustomSettings = () => {
             <CustomTitle><span>Custom activity settings</span></CustomTitle>
             <CustomSettingsContainer>   
                 <CustomSettingsColumn>
-                    <SelectSetting id={0} />
-                    <SingleValueSetting id={1} />
-                    <RangeValuesSetting id={2} />
+                    <SelectSetting activityId={0} />
+                    <SingleValueSetting activityId={1} />
+                    <RangeValuesSetting activityId={2} />
                 </CustomSettingsColumn>
                 <CustomSettingsColumn>
-                    <SingleValueSetting id={3} />
-                    <SingleValueSetting id={4} />
-                    <RangeValuesSetting id={5} />
+                    <SingleValueSetting activityId={3} />
+                    <SingleValueSetting activityId={4} />
+                    <RangeValuesSetting activityId={5} />
                 </CustomSettingsColumn>
             </CustomSettingsContainer>
         </div>
@@ -151,7 +160,7 @@ const Value = styled.div`
     font-size: 25px;
     color: #fff;
     margin: 4px 10px 0 10px;
-    min-width: 10%;
+    min-width: 60px;
     text-align: center;
     user-select: none;
 `;

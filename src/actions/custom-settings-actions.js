@@ -1,7 +1,7 @@
-const setSelectedCustomActivity = (id) => {
+const setSelectedCustomActivity = (activityId) => {
     return {
         type: 'SET_SELECTED_CUSTOM_ACTIVITY',
-        payload: id
+        payload: activityId
     };
 };
 
@@ -12,120 +12,55 @@ const setSelectedTypeOfAction = (type) => {
     };
 };
 
-const incPriceValueAction = (id) => {
+const incValueAction = (activityId) => {
     return {
-        type: 'INC_PRICE_VALUE',
-        payload: id
+        type: 'INC_VALUE',
+        payload: activityId
     };
 };
 
-const decPriceValueAction = (id) => {
+const decValueAction = (activityId) => {
     return {
-        type: 'DEC_PRICE_VALUE',
-        payload: id
+        type: 'DEC_VALUE',
+        payload: activityId
     };
 };
 
-const incLowerPriceValueAction = (step = 0.05) => {
+const incLowerValueAction = (activityId) => {
     return {
-        type: 'INC_LOWER_PRICE_VALUE',
-        payload: step
+        type: 'INC_LOWER_VALUE',
+        payload: activityId
     };
 };
 
-const decLowerPriceValueAction = (step = 0.05) => {
+const decLowerValueAction = (activityId) => {
     return {
-        type: 'DEC_LOWER_PRICE_VALUE',
-        payload: step
+        type: 'DEC_LOWER_VALUE',
+        payload: activityId
     };
 };
 
-const incHigherPriceValueAction = (step = 0.05) => {
+const incHigherValueAction = (activityId) => {
     return {
-        type: 'INC_HIGHER_PRICE_VALUE',
-        payload: step
+        type: 'INC_HIGHER_VALUE',
+        payload: activityId
     };
 };
 
-const decHigherPriceValueAction = (step = 0.05) => {
+const decHigherValueAction = (activityId) => {
     return {
-        type: 'DEC_HIGHER_PRICE_VALUE',
-        payload: step
+        type: 'DEC_HIGHER_VALUE',
+        payload: activityId
     };
 };
-
-const incNumberOfParticipantsValueAction = (step = 1) => {
-    return {
-        type: 'INC_NUMBER_OF_PARTICIPANTS_VALUE',
-        payload: step
-    };
-};
-
-const decNumberOfParticipantsValueAction = (step = 1) => {
-    return {
-        type: 'DEC_NUMBER_OF_PARTICIPANTS_VALUE',
-        payload: step
-    };
-};
-
-const incAccessibilityValueAction = (step = 0.01) => {
-    return {
-        type: 'INC_ACCESSIBILITY_VALUE',
-        payload: step
-    };
-};
-
-const decAccessibilityValueAction = (step = 0.01) => {
-    return {
-        type: 'DEC_ACCESSIBILITY_VALUE',
-        payload: step
-    };
-};
-
-const incLowerAccessibilityValueAction = (step = 0.01) => {
-    return {
-        type: 'INC_LOWER_ACCESSIBILITY_VALUE',
-        payload: step
-    };
-};
-
-const decLowerAccessibilityValueAction = (step = 0.01) => {
-    return {
-        type: 'DEC_LOWER_ACCESSIBILITY_VALUE',
-        payload: step
-    };
-};
-
-const incHigherAccessibilityValueAction = (step = 0.01) => {
-    return {
-        type: 'INC_HIGHER_ACCESSIBILITY_VALUE',
-        payload: step
-    };
-};
-
-const decHigherAccessibilityValueAction = (step = 0.01) => {
-    return {
-        type: 'DEC_HIGHER_ACCESSIBILITY_VALUE',
-        payload: step
-    };
-};
-
 
 export {
     setSelectedTypeOfAction,
     setSelectedCustomActivity,
-    incPriceValueAction,
-    decPriceValueAction,
-    incLowerPriceValueAction,
-    decLowerPriceValueAction,
-    incHigherPriceValueAction,
-    decHigherPriceValueAction,
-    incNumberOfParticipantsValueAction,
-    decNumberOfParticipantsValueAction,
-    incAccessibilityValueAction,
-    decAccessibilityValueAction,
-    incLowerAccessibilityValueAction,
-    decLowerAccessibilityValueAction,
-    incHigherAccessibilityValueAction,
-    decHigherAccessibilityValueAction 
+    incValueAction,
+    decValueAction,
+    incLowerValueAction,
+    decLowerValueAction,
+    incHigherValueAction,
+    decHigherValueAction
 };
