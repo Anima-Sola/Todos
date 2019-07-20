@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import StoreContext from '../../store-context';
 import tick from './tick.png';
+import plus from './plus.png';
+import minus from './minus.png';
 import { 
         setSelectedTypeOfAction,
         setSelectedCustomActivity,
@@ -16,6 +18,7 @@ import {
 const SelectSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities, activityTypes } = customSettingsState;
+    const { radioSwitcherId, CustomSettingTitle } = activities[activityId];
 
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? {opacity: 1} : {};
@@ -39,8 +42,8 @@ const SelectSetting = ({ activityId }) => {
     
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={activities[activityId].radioSwitcherId} type="radio" name="setting" checked={isChecked} onClick={setCustomActivity} readOnly />
-            <label htmlFor={activities[activityId].radioSwitcherId}><span></span>{activities[activityId].CustomSettingTitle}</label>
+            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" checked={isChecked} onClick={setCustomActivity} readOnly />
+            <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
             <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType} style={disabledStyles} >
                 {getActivityTypeList()}
             </Select>
@@ -51,11 +54,10 @@ const SelectSetting = ({ activityId }) => {
 const SingleValueSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
+    const { value, radioSwitcherId, CustomSettingTitle } = activities[activityId];
     
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? { opacity: 1 } : {};
-    const Plus = isChecked ? <EnabledPlus>+</EnabledPlus> : <DisabledPlus>+</DisabledPlus>;
-    const Minus = isChecked ? <EnabledMinus>-</EnabledMinus> : <DisabledMinus>-</DisabledMinus>;
 
     const setCustomActivity = () => {
         customSettingsDispatch(setSelectedCustomActivity(activityId));
@@ -71,12 +73,12 @@ const SingleValueSetting = ({ activityId }) => {
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={activities[activityId].radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} />
-            <label htmlFor={activities[activityId].radioSwitcherId}><span></span>{activities[activityId].CustomSettingTitle}</label>
+            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} />
+            <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
-                <ValueButton onClick={decValue} disabled={!isChecked}>{Minus}</ValueButton>
-                <Value>{ activities[activityId].value }</Value>
-                <ValueButton onClick={incValue} disabled={!isChecked}>{Plus}</ValueButton>
+                <ValueButton onClick={decValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
+                <Value>{ value }</Value>
+                <ValueButton onClick={incValue} disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
             </ValueContainer>
         </CustomSettingsItem>
     );   
@@ -85,11 +87,10 @@ const SingleValueSetting = ({ activityId }) => {
 const RangeValuesSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
+    const { lowerValue, higherValue, radioSwitcherId, CustomSettingTitle } = activities[activityId];
 
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? { opacity: 1 } : {};
-    const Plus = isChecked ? <EnabledPlus>+</EnabledPlus> : <DisabledPlus>+</DisabledPlus>;
-    const Minus = isChecked ? <EnabledMinus>-</EnabledMinus> : <DisabledMinus>-</DisabledMinus>;
     
     const setCustomActivity = () => {
         customSettingsDispatch(setSelectedCustomActivity(activityId));
@@ -113,15 +114,15 @@ const RangeValuesSetting = ({ activityId }) => {
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={activities[activityId].radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity}  />
-            <label htmlFor={activities[activityId].radioSwitcherId}><span></span>{activities[activityId].CustomSettingTitle}</label>
+            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity}  />
+            <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
-                <ValueButton onClick={decLowerValue}>{Minus}</ValueButton>
-                <Value>{ activities[activityId].lowerValue }</Value>
-                <ValueButton onClick={incLowerValue }>{Plus}</ValueButton>
-                <ValueButton onClick={decHigherValue}>{Minus}</ValueButton>
-                <Value>{ activities[activityId].higherValue }</Value>
-                <ValueButton onClick={incHigherValue}>{Plus}</ValueButton>
+                <ValueButton onClick={decLowerValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
+                <Value>{ lowerValue }</Value>
+                <ValueButton onClick={incLowerValue } disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
+                <ValueButton onClick={decHigherValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
+                <Value>{ higherValue }</Value>
+                <ValueButton onClick={incHigherValue} disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
             </ValueContainer>
         </CustomSettingsItem>
     );
@@ -133,75 +134,29 @@ const CustomSettings = () => {
             <CustomTitle><span>Custom activity settings</span></CustomTitle>
             <CustomSettingsContainer>   
                 <CustomSettingsColumn>
-                    <SelectSetting activityId={0} />
-                    <SingleValueSetting activityId={1} />
-                    <RangeValuesSetting activityId={2} />
+                    <CustomSettingsItemBorderBottomRight>
+                        <SelectSetting activityId={0} />
+                    </CustomSettingsItemBorderBottomRight>
+                    <CustomSettingsItemBorderBottomRight>
+                        <SingleValueSetting activityId={1} />
+                    </CustomSettingsItemBorderBottomRight>
+                    <CustomSettingsItemBorderRight>
+                        <RangeValuesSetting activityId={2} />
+                    </CustomSettingsItemBorderRight>
                 </CustomSettingsColumn>
                 <CustomSettingsColumn>
-                    <SingleValueSetting activityId={3} />
-                    <SingleValueSetting activityId={4} />
+                    <CustomSettingsItemBorderBottom>
+                        <SingleValueSetting activityId={3} />
+                    </CustomSettingsItemBorderBottom>
+                    <CustomSettingsItemBorderBottom>
+                        <SingleValueSetting activityId={4} />
+                    </CustomSettingsItemBorderBottom>
                     <RangeValuesSetting activityId={5} />
                 </CustomSettingsColumn>
             </CustomSettingsContainer>
         </div>
     );
 }
-
-const ValueContainer = styled.div`
-    margin-top: 20px;
-    width: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const Value = styled.div`
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 25px;
-    color: #fff;
-    margin: 4px 10px 0 10px;
-    min-width: 60px;
-    text-align: center;
-    user-select: none;
-`;
-
-const ValueButton = styled.button`
-    width: 30px;
-    height: 30px;
-    background: none;
-    border-radius: 3px;
-    border: 1px solid #fff;
-    color: #fff;
-    font-size: 30px;
-    outline: none;
-    margin: 0 10px;    
-`;
-
-const DisabledPlus = styled.div`
-    color: #fff;
-    font-size: 30px;
-    margin: -3px 0 0 -1px;
-    cursor: default;
-`;
-
-const DisabledMinus = styled.div`
-    color: #fff;
-    font-size: 30px;
-    margin-top: -6px;
-    cursor: default;
-`;
-
-const EnabledPlus = styled(DisabledPlus)`
-    :hover {
-        font-weight: bold;
-    }
-`;
-
-const EnabledMinus = styled(DisabledMinus)`
-    :hover {
-        font-weight: bold;
-    }
-`;
 
 const CustomTitle = styled.span`
     width: 100%;
@@ -218,8 +173,7 @@ const CustomSettingsContainer = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 80%;
-    margin-left: 15%;    
+    user-select: none;    
 `;
 
 const CustomSettingsColumn = styled.div`
@@ -229,9 +183,23 @@ const CustomSettingsColumn = styled.div`
     font-size: 20px;
 `;
 
+const CustomSettingsItemBorderBottomRight = styled.div`
+    border-bottom: 1px dashed #fff;
+    border-right: 1px dashed #fff;
+`;
+
+
+const CustomSettingsItemBorderRight = styled.div`
+    border-right: 1px dashed #fff;
+`;
+
+const CustomSettingsItemBorderBottom = styled.div`
+    border-bottom: 1px dashed #fff;
+`;
+
 const CustomSettingsItem = styled.div`
     width: 100%;
-    margin-bottom: 23px;
+    padding: 14px 10px;
     opacity: 0.5;
 `;
 
@@ -259,12 +227,12 @@ const RadioSwitcher = styled.input`
 `;
 
 const Select = styled.select`
-    width: 80%;
+    width: 100%;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 20px;
     color: #fff;
     background: none;
-    margin: 20px 0 0 5%;
+    margin: 14px 0 0 0;
     border-radius: 3px;
     cursor: pointer;
 
@@ -274,6 +242,39 @@ const Select = styled.select`
         border: 1px solid #fff;
     }
 
+`;
+
+const ValueContainer = styled.div`
+    margin-top: 14px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+`;
+
+const Value = styled.div`
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 25px;
+    color: #fff;
+    margin: 4px 10px 0 10px;
+    min-width: 60px;
+    text-align: center;
+    user-select: none;
+`;
+
+const ValueButton = styled.button`
+    width: 40px;
+    height: 30px;
+    background: none;
+    border-radius: 3px;
+    border: 1px solid #fff;
+    
+    :hover:enabled {
+        background-color: black;
+    }
+
+    img {
+        margin: -2px -9px;
+    }
 `;
 
 export default CustomSettings;

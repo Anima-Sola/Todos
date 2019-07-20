@@ -11,7 +11,7 @@ const customSettingsInitialState = {
             id: 1,
             value: 0.1,
             radioSwitcherId: 'getActivityByPrice',
-            CustomSettingTitle: 'Activity by price',
+            CustomSettingTitle: 'Activity by price (0..1)',
             step: 0.05,
             max: 1,
             min: 0
@@ -21,42 +21,38 @@ const customSettingsInitialState = {
             lowerValue: 0,
             higherValue: 0.3,
             radioSwitcherId: 'getActivityByPriceRange',
-            CustomSettingTitle: 'Activity by price range',
+            CustomSettingTitle: 'Activity by price range (0..1)',
             step: 0.05,
-            lowerMax: 1,
             lowerMin: 0,
-            higherMax: 1,
-            higherMin: 0
+            higherMax: 1
         },
         {
             id: 3,
             value: 1,
             radioSwitcherId: 'getActivityByNumberOfParticipants',
-            CustomSettingTitle: 'Activity by number of participants',
+            CustomSettingTitle: 'Activity by number of participants (1..100)',
             step: 1,
-            max: 1,
-            min: 9999
+            max: 100,
+            min: 1
         },
         {
             id: 4,
             value: 0.5,
             radioSwitcherId: 'getActivityByAccessibility',
-            CustomSettingTitle: 'Activity by accessibility',
+            CustomSettingTitle: 'Activity by accessibility (0..1)',
             step: 0.01,
-            max: 0,
-            min: 1
+            max: 1,
+            min: 0
         },
         {
             id: 5,
             lowerValue: 0,
-            higherValue: 0.9,
+            higherValue: 0.2,
             radioSwitcherId: 'getActivityByAccessibilityRange',
-            CustomSettingTitle: 'Activity by accessibility range',
+            CustomSettingTitle: 'Activity by accessibility range (0..1)',
             step: 0.01,
-            lowerMax: 1,
             lowerMin: 0,
-            higherMax: 1,
-            higherMin: 0
+            higherMax: 1
         }
     ],
     activityTypes: [
@@ -78,22 +74,37 @@ const updateTypeOfAction = (state, activityId) => {
     return { ...state, activities };
 }
 
-const updateValue = (state, activityId, direction) => {
+const updateValue = (max, min, step, value, direction) => {
+    const newValue = Math.round((value + direction * step) * 100) / 100;
+    const canUpdate = (newValue >= min) && (newValue <= max);
+    return canUpdate ? newValue : value;
+}
+
+const updateSingleValue = (state, activityId, direction) => {
     const activities = [...state.activities];
     const { max, min, step, value } = activities[activityId];
 
-    const newValue = Math.round((value + direction * step) * 100) / 100;
-    console.log(newValue, min, max);
-
-    const canUpdate = (newValue >= min) && (newValue <= max);
-
-    activities[activityId].value = canUpdate ? newValue : value;
+    activities[activityId].value = updateValue( max, min, step, value, direction );
 
     return { ...state, activities };
 };
 
-const updateRangeValue = (activityId, limitType, direction) => {
+const updateLowerRangeValue = (state, activityId, direction) => {
+    const activities = [...state.activities];
+    const { higherValue, lowerMin, step, lowerValue } = activities[activityId];
 
+    activities[activityId].lowerValue = updateValue( higherValue, lowerMin, step, lowerValue, direction );
+
+    return { ...state, activities };
+};
+
+const updateHigherRangeValue = (state, activityId, direction) => {
+    const activities = [...state.activities];
+    const { higherMax, lowerValue, step, higherValue } = activities[activityId];
+
+    activities[activityId].higherValue = updateValue( higherMax, lowerValue, step, higherValue, direction );
+
+    return { ...state, activities };
 };
 
 const updateCustomSettingsReducer = (state = customSettingsInitialState, action) => {
@@ -106,26 +117,22 @@ const updateCustomSettingsReducer = (state = customSettingsInitialState, action)
             return updateTypeOfAction(state, action.payload);
 
         case 'INC_VALUE':
-            return updateValue(state, action.payload, 1);
+            return updateSingleValue(state, action.payload, 1);
 
         case 'DEC_VALUE':
-            return updateValue(state, action.payload, -1);
+            return updateSingleValue(state, action.payload, -1);
 
         case 'INC_LOWER_VALUE':
-            updateRangeValue(state, action.payload, 'lowerMax', 1);
-            return state;
+            return updateLowerRangeValue(state, action.payload, 1);
 
         case 'DEC_LOWER_VALUE':
-            updateRangeValue(state, action.payload, 'lowerMin' -1);
-            return state;
+            return updateLowerRangeValue(state, action.payload, -1);
 
         case 'INC_HIGHER_VALUE':
-            updateRangeValue(state, action.payload, 'higherMax', 1);
-            return state;
+            return updateHigherRangeValue(state, action.payload, 1);
     
         case 'DEC_HIGHER_VALUE':
-            updateRangeValue(state, action.payload, 'higherMin', -1);
-            return state;
+            return updateHigherRangeValue(state, action.payload, -1);
 
         default:
             return state;
