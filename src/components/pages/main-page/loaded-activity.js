@@ -52,8 +52,8 @@ const LoadedActivityContainer = () => {
                 {result}
             </ResultContainer>
             <ResultButtonsContainer>
-                <ResultButton onClick={refreshActivity}>Get random activity</ResultButton>
-                <ResultButton>Get custom activity</ResultButton>
+                <ResultButton onClick={refreshActivity}>Random activity</ResultButton>
+                <ResultButton>Custom activity</ResultButton>
                 <ResultButton>Archive activity</ResultButton>
             </ResultButtonsContainer>
         </div>
@@ -67,6 +67,10 @@ const ResultContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
+    @media (max-width: 576px) { 
+        height: 170px;
+    }
 `;
 
 const LoadedActivity = styled.span`
@@ -113,11 +117,13 @@ const ResultButton = styled.button`
     background: transparent;
     color: #fff;
     border-radius: 7px;
-    min-width: 200px;
+    width: 200px;
     cursor: pointer;
+    outline: none;
 
     :hover {
         font-weight: bold;
+        background-color: black;
     }
 
 `;

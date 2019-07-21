@@ -37,7 +37,7 @@ const App = () => {
 
 const Main = styled.main`
     max-width: 1200px;
-    min-width: 500px;
+    min-width: 510px;
     margin: auto;
     display: flex;
     min-height: 100vh;

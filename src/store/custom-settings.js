@@ -5,13 +5,13 @@ const customSettingsInitialState = {
             id: 0,
             type: 'Education',
             radioSwitcherId: 'activityByType',
-            CustomSettingTitle: 'Activity by type'
+            CustomSettingTitle: 'By type'
         },
         {
             id: 1,
             value: 0.1,
             radioSwitcherId: 'getActivityByPrice',
-            CustomSettingTitle: 'Activity by price (0..1)',
+            CustomSettingTitle: 'By price (0..1)',
             step: 0.05,
             max: 1,
             min: 0
@@ -21,7 +21,7 @@ const customSettingsInitialState = {
             lowerValue: 0,
             higherValue: 0.3,
             radioSwitcherId: 'getActivityByPriceRange',
-            CustomSettingTitle: 'Activity by price range (0..1)',
+            CustomSettingTitle: 'By price range (0..1)',
             step: 0.05,
             lowerMin: 0,
             higherMax: 1
@@ -30,7 +30,7 @@ const customSettingsInitialState = {
             id: 3,
             value: 1,
             radioSwitcherId: 'getActivityByNumberOfParticipants',
-            CustomSettingTitle: 'Activity by number of participants (1..100)',
+            CustomSettingTitle: 'By num of participants (1..100)',
             step: 1,
             max: 100,
             min: 1
@@ -39,7 +39,7 @@ const customSettingsInitialState = {
             id: 4,
             value: 0.5,
             radioSwitcherId: 'getActivityByAccessibility',
-            CustomSettingTitle: 'Activity by accessibility (0..1)',
+            CustomSettingTitle: 'By accessibility (0..1)',
             step: 0.01,
             max: 1,
             min: 0
@@ -49,7 +49,7 @@ const customSettingsInitialState = {
             lowerValue: 0,
             higherValue: 0.2,
             radioSwitcherId: 'getActivityByAccessibilityRange',
-            CustomSettingTitle: 'Activity by accessibility range (0..1)',
+            CustomSettingTitle: 'By accessibility range (0..1)',
             step: 0.01,
             lowerMin: 0,
             higherMax: 1

@@ -22,7 +22,6 @@ const SelectSetting = ({ activityId }) => {
 
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? {opacity: 1} : {};
-    const disabledStyles = isChecked ? {} : { cursor: 'default' };
     
     const getActivityTypeList = () => {
         let key = 0;
@@ -42,9 +41,9 @@ const SelectSetting = ({ activityId }) => {
     
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" checked={isChecked} onClick={setCustomActivity} readOnly />
+            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" checked={isChecked} onClick={setCustomActivity} checked={isChecked} readOnly />
             <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
-            <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType} style={disabledStyles} >
+            <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType} >
                 {getActivityTypeList()}
             </Select>
         </CustomSettingsItem>
@@ -73,7 +72,7 @@ const SingleValueSetting = ({ activityId }) => {
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} />
+            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} />
             <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
                 <ValueButton onClick={decValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
@@ -114,7 +113,7 @@ const RangeValuesSetting = ({ activityId }) => {
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity}  />
+            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} />
             <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
                 <ValueButton onClick={decLowerValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
@@ -173,7 +172,12 @@ const CustomSettingsContainer = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    user-select: none;    
+    user-select: none;
+    
+    @media (max-width: 576px) {
+        display: block;
+    }    
+
 `;
 
 const CustomSettingsColumn = styled.div`
@@ -181,16 +185,36 @@ const CustomSettingsColumn = styled.div`
     color: #fff;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 20px;
+
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
+    
+    @media (max-width: 576px) {
+        width: 100%;
+        font-size: 20px; 
+    }  
 `;
 
 const CustomSettingsItemBorderBottomRight = styled.div`
     border-bottom: 1px dashed #fff;
     border-right: 1px dashed #fff;
+
+    @media (max-width: 576px) {
+        border-right: none;
+    }  
+
 `;
 
 
 const CustomSettingsItemBorderRight = styled.div`
     border-right: 1px dashed #fff;
+
+    @media (max-width: 576px) {
+        border-right: none;
+        border-bottom: 1px dashed #fff;
+    }  
+
 `;
 
 const CustomSettingsItemBorderBottom = styled.div`
@@ -234,7 +258,10 @@ const Select = styled.select`
     background: none;
     margin: 14px 0 0 0;
     border-radius: 3px;
-    cursor: pointer;
+
+    :hover:enabled {
+        cursor: pointer;
+    }
 
     option {
         background: #242527;
@@ -270,6 +297,7 @@ const ValueButton = styled.button`
     
     :hover:enabled {
         background-color: black;
+        cursor: pointer;
     }
 
     img {
