@@ -3,14 +3,14 @@ const customSettingsInitialState = {
     activities: [
         {
             id: 0,
-            type: 'Education',
-            radioSwitcherId: 'activityByType',
+            value: 'Education',
+            customSetting: 'getActivityByType',
             CustomSettingTitle: 'By type'
         },
         {
             id: 1,
-            value: 0.1,
-            radioSwitcherId: 'getActivityByPrice',
+            value: 0,
+            customSetting: 'getActivityByPrice',
             CustomSettingTitle: 'By price (0..1)',
             step: 0.05,
             max: 1,
@@ -20,7 +20,7 @@ const customSettingsInitialState = {
             id: 2,
             lowerValue: 0,
             higherValue: 0.3,
-            radioSwitcherId: 'getActivityByPriceRange',
+            customSetting: 'getActivityByPriceRange',
             CustomSettingTitle: 'By price range (0..1)',
             step: 0.05,
             lowerMin: 0,
@@ -29,7 +29,7 @@ const customSettingsInitialState = {
         {
             id: 3,
             value: 1,
-            radioSwitcherId: 'getActivityByNumberOfParticipants',
+            customSetting: 'getActivityByNumberOfParticipants',
             CustomSettingTitle: 'By num of participants (1..100)',
             step: 1,
             max: 100,
@@ -38,7 +38,7 @@ const customSettingsInitialState = {
         {
             id: 4,
             value: 0.5,
-            radioSwitcherId: 'getActivityByAccessibility',
+            customSetting: 'getActivityByAccessibility',
             CustomSettingTitle: 'By accessibility (0..1)',
             step: 0.01,
             max: 1,
@@ -48,7 +48,7 @@ const customSettingsInitialState = {
             id: 5,
             lowerValue: 0,
             higherValue: 0.2,
-            radioSwitcherId: 'getActivityByAccessibilityRange',
+            customSetting: 'getActivityByAccessibilityRange',
             CustomSettingTitle: 'By accessibility range (0..1)',
             step: 0.01,
             lowerMin: 0,
@@ -70,7 +70,7 @@ const customSettingsInitialState = {
 
 const updateTypeOfAction = (state, activityId) => {
     const activities = [...state.activities];
-    activities[0].type = activityId;
+    activities[0].value = activityId;
     return { ...state, activities };
 }
 

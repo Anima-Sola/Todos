@@ -20,7 +20,8 @@ export default class BoredApiService {
     }
 
     getActivityByType = async (type) => {
-        return await this.getResource(`/activity?type=${type}`);
+        const lowerType = type.toLowerCase();
+        return await this.getResource(`/activity?type=${lowerType}`);
     }
 
     getActivityByNumberOfParticipants = async (number) => {

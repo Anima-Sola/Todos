@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
+import StoreContext from '../../store-context';
 import Spinner from '../../spinner';
 import BoredApiService from '../../../services/bored-api-service';
 
@@ -21,29 +22,90 @@ const ShowLoadedActivity = ({ loadedActivity }) => {
 
 }
 
-const LoadedActivityContainer = () => {
+const ShowNoSuchActivityMessage = () => {
+    
+    return (
+        <div>
+            <LoadedActivity>No activities found with the specified parameters</LoadedActivity>
+        </div>
+    );
 
-    const [isLoading, setLoadingStatus] = useState(true);
-    const [loadedActivity, setLoadedActivity] = useState({});
+}
+
+const LoadedActivityContainer = () => {
+    const [loadingStatus, setLoadingStatus] = useState({ 
+        isLoading: true, 
+        serviceMethod: boredApiService.getRandomActivity() 
+    });
+
+    const { customSettingsState } = useContext(StoreContext);
+    const { selectedActivityId, activities } = customSettingsState;
     
     useEffect(() => {
 
-        if(isLoading) {
+        if(loadingStatus.isLoading) {
 
-            boredApiService.getRandomActivity()
+            loadingStatus.serviceMethod
                 .then((data) => {
-                    setLoadingStatus(false);
-                    setLoadedActivity(data);
+                    
+                    if (data.error === undefined) {
+
+                        setLoadingStatus({
+                            isLoading: false,
+                            isActivityExists: true, 
+                            data: data,
+                        });
+                    
+                    } else {
+                        
+                        setLoadingStatus({
+                            isLoading: false, 
+                            isActivityExists: false,
+                        });
+
+                    }
+
                 });
         
         }
 
     });
 
-    const result = isLoading ? <Spinner /> : <ShowLoadedActivity loadedActivity={loadedActivity} />
+    const getRandomActivity = () => {
+        setLoadingStatus({ 
+            isLoading: true, 
+            serviceMethod: boredApiService.getRandomActivity() 
+        });
+    }
 
-    const refreshActivity = () => {
-        setLoadingStatus(true);
+    const getCustomActivity = () => {
+
+        const { value, lowerValue, higherValue, customSetting } = activities[selectedActivityId];
+
+        if (value === undefined) {
+
+            setLoadingStatus({ 
+                isLoading: true, 
+                serviceMethod: boredApiService[customSetting](lowerValue, higherValue) 
+            });
+            
+        } else {
+            
+            setLoadingStatus({ 
+                isLoading: true, 
+                serviceMethod: boredApiService[customSetting](value) 
+            });
+   
+        }
+
+    }
+
+    let result = '';
+
+    if (loadingStatus.isLoading) {
+        result = <Spinner />;
+    } else {
+        result = (loadingStatus.isActivityExists) ? <ShowLoadedActivity loadedActivity={loadingStatus.data} /> : <ShowNoSuchActivityMessage />;
     }
         
     return (
@@ -52,8 +114,8 @@ const LoadedActivityContainer = () => {
                 {result}
             </ResultContainer>
             <ResultButtonsContainer>
-                <ResultButton onClick={refreshActivity}>Random activity</ResultButton>
-                <ResultButton>Custom activity</ResultButton>
+                <ResultButton onClick={getRandomActivity}>Random activity</ResultButton>
+                <ResultButton onClick={getCustomActivity}>Custom activity</ResultButton>
                 <ResultButton>Archive activity</ResultButton>
             </ResultButtonsContainer>
         </div>

@@ -18,7 +18,7 @@ import {
 const SelectSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities, activityTypes } = customSettingsState;
-    const { radioSwitcherId, CustomSettingTitle } = activities[activityId];
+    const { customSetting, CustomSettingTitle } = activities[activityId];
 
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? {opacity: 1} : {};
@@ -41,8 +41,8 @@ const SelectSetting = ({ activityId }) => {
     
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" checked={isChecked} onClick={setCustomActivity} checked={isChecked} readOnly />
-            <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
+            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} readOnly />
+            <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
             <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType} >
                 {getActivityTypeList()}
             </Select>
@@ -53,7 +53,7 @@ const SelectSetting = ({ activityId }) => {
 const SingleValueSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
-    const { value, radioSwitcherId, CustomSettingTitle } = activities[activityId];
+    const { value, customSetting, CustomSettingTitle } = activities[activityId];
     
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? { opacity: 1 } : {};
@@ -72,8 +72,8 @@ const SingleValueSetting = ({ activityId }) => {
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} />
-            <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
+            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} />
+            <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
                 <ValueButton onClick={decValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
                 <Value>{ value }</Value>
@@ -86,7 +86,7 @@ const SingleValueSetting = ({ activityId }) => {
 const RangeValuesSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
-    const { lowerValue, higherValue, radioSwitcherId, CustomSettingTitle } = activities[activityId];
+    const { lowerValue, higherValue, customSetting, CustomSettingTitle } = activities[activityId];
 
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? { opacity: 1 } : {};
@@ -113,8 +113,8 @@ const RangeValuesSetting = ({ activityId }) => {
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={radioSwitcherId} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} />
-            <label htmlFor={radioSwitcherId}><span></span>{CustomSettingTitle}</label>
+            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} />
+            <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
                 <ValueButton onClick={decLowerValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
                 <Value>{ lowerValue }</Value>
@@ -258,6 +258,7 @@ const Select = styled.select`
     background: none;
     margin: 14px 0 0 0;
     border-radius: 3px;
+    outline: none;
 
     :hover:enabled {
         cursor: pointer;
