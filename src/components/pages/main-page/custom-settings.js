@@ -18,7 +18,7 @@ import {
 const SelectSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities, activityTypes } = customSettingsState;
-    const { customSetting, CustomSettingTitle } = activities[activityId];
+    const { customSetting, CustomSettingTitle, value } = activities[activityId];
 
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? {opacity: 1} : {};
@@ -26,7 +26,7 @@ const SelectSetting = ({ activityId }) => {
     const getActivityTypeList = () => {
         let key = 0;
         return activityTypes.map(( type ) => {
-            return <option key={key++} selected={ (type === activities[activityId].type) }>{ type }</option>
+            return <option key={key++} >{ type }</option>
         });
     }
     
@@ -43,7 +43,7 @@ const SelectSetting = ({ activityId }) => {
         <CustomSettingsItem style={opacity}>
             <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} readOnly />
             <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
-            <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType} >
+            <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType} value={value}>
                 {getActivityTypeList()}
             </Select>
         </CustomSettingsItem>
@@ -72,7 +72,7 @@ const SingleValueSetting = ({ activityId }) => {
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} />
+            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} readOnly />
             <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
                 <ValueButton onClick={decValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
@@ -113,7 +113,7 @@ const RangeValuesSetting = ({ activityId }) => {
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} />
+            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} readOnly />
             <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
                 <ValueButton onClick={decLowerValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>

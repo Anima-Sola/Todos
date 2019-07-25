@@ -1,22 +1,28 @@
-const mainMenuInitialState = {
-  selectedItemId: 0,
-  items: [
-    {
-      id: 0,
-      title: 'Find Activity',
-      link: '/'
-    },
-    {
-      id: 1,
-      title: 'Archive',
-      link: '/archive'
-    },
-    {
-      id: 2,
-      title: 'About',
-      link: '/about'
-    }
-  ]
+let mainMenuInitialState = JSON.parse(localStorage.getItem('mainMenuState'));
+
+if(mainMenuInitialState === null) {
+
+    mainMenuInitialState = {
+      selectedItemId: 0,
+      items: [
+        {
+          id: 0,
+          title: 'Find Activity',
+          link: '/'
+        },
+        {
+          id: 1,
+          title: 'Archive',
+          link: '/archive'
+        },
+        {
+          id: 2,
+          title: 'About',
+          link: '/about'
+        }
+      ]
+    };
+
 };
 
 const updateMainMenuReducer = (state = mainMenuInitialState, action) => {

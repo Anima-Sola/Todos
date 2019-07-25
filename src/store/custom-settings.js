@@ -1,72 +1,78 @@
-const customSettingsInitialState = {
-    selectedActivityId: 0,
-    activities: [
-        {
-            id: 0,
-            value: 'Education',
-            customSetting: 'getActivityByType',
-            CustomSettingTitle: 'By type'
-        },
-        {
-            id: 1,
-            value: 0,
-            customSetting: 'getActivityByPrice',
-            CustomSettingTitle: 'By price (0..1)',
-            step: 0.05,
-            max: 1,
-            min: 0
-        },
-        {
-            id: 2,
-            lowerValue: 0,
-            higherValue: 0.3,
-            customSetting: 'getActivityByPriceRange',
-            CustomSettingTitle: 'By price range (0..1)',
-            step: 0.05,
-            lowerMin: 0,
-            higherMax: 1
-        },
-        {
-            id: 3,
-            value: 1,
-            customSetting: 'getActivityByNumberOfParticipants',
-            CustomSettingTitle: 'By num of participants (1..100)',
-            step: 1,
-            max: 100,
-            min: 1
-        },
-        {
-            id: 4,
-            value: 0.5,
-            customSetting: 'getActivityByAccessibility',
-            CustomSettingTitle: 'By accessibility (0..1)',
-            step: 0.01,
-            max: 1,
-            min: 0
-        },
-        {
-            id: 5,
-            lowerValue: 0,
-            higherValue: 0.2,
-            customSetting: 'getActivityByAccessibilityRange',
-            CustomSettingTitle: 'By accessibility range (0..1)',
-            step: 0.01,
-            lowerMin: 0,
-            higherMax: 1
-        }
-    ],
-    activityTypes: [
-        'Education',
-        'Recreational',
-        'Social',
-        'DIY',
-        'Charity',
-        'Cooking',
-        'Relaxation',
-        'Music',
-        'Busywork',
-    ]
-};
+let customSettingsInitialState = JSON.parse(localStorage.getItem('customSettingsState'));
+
+if(customSettingsInitialState === null) {
+
+    customSettingsInitialState = {
+        selectedActivityId: 0,
+        activities: [
+            {
+                id: 0,
+                value: 'Education',
+                customSetting: 'getActivityByType',
+                CustomSettingTitle: 'By type'
+            },
+            {
+                id: 1,
+                value: 0,
+                customSetting: 'getActivityByPrice',
+                CustomSettingTitle: 'By price (0..1)',
+                step: 0.05,
+                max: 1,
+                min: 0
+            },
+            {
+                id: 2,
+                lowerValue: 0,
+                higherValue: 0.3,
+                customSetting: 'getActivityByPriceRange',
+                CustomSettingTitle: 'By price range (0..1)',
+                step: 0.05,
+                lowerMin: 0,
+                higherMax: 1
+            },
+            {
+                id: 3,
+                value: 1,
+                customSetting: 'getActivityByNumberOfParticipants',
+                CustomSettingTitle: 'By num of participants (1..100)',
+                step: 1,
+                max: 100,
+                min: 1
+            },
+            {
+                id: 4,
+                value: 0.5,
+                customSetting: 'getActivityByAccessibility',
+                CustomSettingTitle: 'By accessibility (0..1)',
+                step: 0.01,
+                max: 1,
+                min: 0
+            },
+            {
+                id: 5,
+                lowerValue: 0,
+                higherValue: 0.2,
+                customSetting: 'getActivityByAccessibilityRange',
+                CustomSettingTitle: 'By accessibility range (0..1)',
+                step: 0.01,
+                lowerMin: 0,
+                higherMax: 1
+            }
+        ],
+        activityTypes: [
+            'Education',
+            'Recreational',
+            'Social',
+            'DIY',
+            'Charity',
+            'Cooking',
+            'Relaxation',
+            'Music',
+            'Busywork',
+        ]
+    };
+
+}
 
 const updateTypeOfAction = (state, activityId) => {
     const activities = [...state.activities];

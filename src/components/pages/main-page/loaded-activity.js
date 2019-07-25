@@ -32,6 +32,16 @@ const ShowNoSuchActivityMessage = () => {
 
 }
 
+const ShowNoServerReplyMessage = () => {
+    
+    return (
+        <div>
+            <LoadedActivity>Sorry, but the server doesn't respond</LoadedActivity>
+        </div>
+    );
+
+}
+
 const LoadedActivityContainer = () => {
     const [loadingStatus, setLoadingStatus] = useState({ 
         isLoading: true, 
@@ -47,6 +57,8 @@ const LoadedActivityContainer = () => {
 
             loadingStatus.serviceMethod
                 .then((data) => {
+
+                    console.log(data);
                     
                     if (data.error === undefined) {
 
@@ -65,6 +77,14 @@ const LoadedActivityContainer = () => {
 
                     }
 
+                }).catch(() => {
+                    
+                    setLoadingStatus({
+                        isLoading: false, 
+                        isActivityExists: false,
+                        noServerReply: true
+                    });
+
                 });
         
         }
@@ -72,10 +92,12 @@ const LoadedActivityContainer = () => {
     });
 
     const getRandomActivity = () => {
+
         setLoadingStatus({ 
             isLoading: true, 
             serviceMethod: boredApiService.getRandomActivity() 
         });
+
     }
 
     const getCustomActivity = () => {
@@ -106,6 +128,7 @@ const LoadedActivityContainer = () => {
         result = <Spinner />;
     } else {
         result = (loadingStatus.isActivityExists) ? <ShowLoadedActivity loadedActivity={loadingStatus.data} /> : <ShowNoSuchActivityMessage />;
+        if(loadingStatus.noServerReply) result = <ShowNoServerReplyMessage />;
     }
         
     return (
