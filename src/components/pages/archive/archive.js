@@ -1,28 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import StoreContext from '../../store-context';
 
 const Archive = () => {
+    const { archiveState } = useContext(StoreContext);
+    const { activities } = archiveState;
 
-    const activity = {
-        accessibility: 0.2,
-        activity: "Take your dog on a walk",
-        key: "9318514",
-        link: "",
-        participants: 1,
-        price: 0,
-        type: "relaxation"
-    }
 
     const showActivities = () => {
-
-        const activities = [];
-
-        for(let i = 0; i < 20; i++) {
-            activities.push(activity);
-        }
-
-        console.log(activities);
 
         const styledActivities = activities.map( (value) => {
 
@@ -52,8 +37,6 @@ const Archive = () => {
     );
 }
 
-export default Archive;
-
 const ArchiveTitle = styled.span`
     width: 100%;
     text-align: center;
@@ -66,8 +49,8 @@ const ArchiveTitle = styled.span`
 
 const ArchiveItem = styled.div`
     width: 100%;
-    border: 1px dashed #fff;
-    margin: 10px 0;
+    border-bottom: 1px dashed #fff;
+    //margin: 10px 0;
     padding: 10px;
 `;
 
@@ -83,3 +66,5 @@ const ArchiveItemParameters = styled.div`
     font-size: 15px;
     margin-top: 10px;
 `;
+
+export default Archive;

@@ -1,4 +1,5 @@
 import setActiveMainMenuItem from './main-menu-actions';
+
 import {     
         setSelectedTypeOfAction,
         setSelectedCustomActivity,
@@ -10,6 +11,8 @@ import {
         decHigherValueAction
     } from './custom-settings-actions';
 
+import archiveNewActivity from './archive-actions';
+
 export {
     setActiveMainMenuItem,
     setSelectedTypeOfAction,
@@ -19,5 +22,6 @@ export {
     incLowerValueAction,
     decLowerValueAction,
     incHigherValueAction,
-    decHigherValueAction
+    decHigherValueAction,
+    archiveNewActivity
 };

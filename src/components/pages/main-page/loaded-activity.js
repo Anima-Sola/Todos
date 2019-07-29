@@ -2,12 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import StoreContext from '../../store-context';
 import Spinner from '../../spinner';
+import ModalWindow from '../../modal-window';
 import BoredApiService from '../../../services/bored-api-service';
+import { archiveNewActivity } from '../../../actions';
 
 const boredApiService = new BoredApiService();
 
 const ShowLoadedActivity = ({ loadedActivity }) => {
-    
     return (
         <div>
             <LoadedActivity>{loadedActivity.activity}</LoadedActivity>
@@ -19,127 +20,112 @@ const ShowLoadedActivity = ({ loadedActivity }) => {
             </ActivityDetails>
         </div>
     );
-
 }
 
 const ShowNoSuchActivityMessage = () => {
-    
-    return (
-        <div>
-            <LoadedActivity>No activities found with the specified parameters</LoadedActivity>
-        </div>
-    );
-
+    return (<LoadedActivity>No activities found with the specified parameters</LoadedActivity>);
 }
 
 const ShowNoServerReplyMessage = () => {
-    
-    return (
-        <div>
-            <LoadedActivity>Sorry, but the server doesn't respond</LoadedActivity>
-        </div>
-    );
-
+    return (<LoadedActivity>Sorry, but the server doesn't respond</LoadedActivity>);
 }
 
 const LoadedActivityContainer = () => {
-    const [loadingStatus, setLoadingStatus] = useState({ 
-        isLoading: true, 
-        serviceMethod: boredApiService.getRandomActivity() 
+    const [state, setState] = useState({
+        isLoading: true,
+        isActivityExists: false,
+        noServerReply: false,
+        serviceMethod: boredApiService.getRandomActivity(),
+        data: {},
+        isArchiveAdding: false,
+        archiveAddingResultMessage: ''
     });
 
-    const { customSettingsState } = useContext(StoreContext);
+    const { customSettingsState, archiveState, archiveDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
-    
+
     useEffect(() => {
-
-        if(loadingStatus.isLoading) {
-
-            loadingStatus.serviceMethod
+        if (state.isLoading) {
+            state.serviceMethod
                 .then((data) => {
-
-                    console.log(data);
-                    
                     if (data.error === undefined) {
-
-                        setLoadingStatus({
-                            isLoading: false,
-                            isActivityExists: true, 
-                            data: data,
-                        });
-                    
+                        setState({ ...state, isLoading: false, isActivityExists: true, data: data });
                     } else {
-                        
-                        setLoadingStatus({
-                            isLoading: false, 
-                            isActivityExists: false,
-                        });
-
+                        setState({ ...state, isLoading: false, isActivityExists: false, data: undefined });
                     }
-
                 }).catch(() => {
-                    
-                    setLoadingStatus({
-                        isLoading: false, 
-                        isActivityExists: false,
-                        noServerReply: true
-                    });
-
+                    setState({ ...state, isLoading: false, isActivityExists: false, data: undefined, noServerReply: true });
                 });
-        
         }
-
     });
 
-    const getRandomActivity = () => {
-
-        setLoadingStatus({ 
-            isLoading: true, 
-            serviceMethod: boredApiService.getRandomActivity() 
-        });
-
-    }
-
-    const getCustomActivity = () => {
-
+    const getActivity = () => {
         const { value, lowerValue, higherValue, customSetting } = activities[selectedActivityId];
 
-        if (value === undefined) {
+        setState({ ...state, isLoading: true, serviceMethod: boredApiService.getRandomActivity() });
 
-            setLoadingStatus({ 
-                isLoading: true, 
-                serviceMethod: boredApiService[customSetting](lowerValue, higherValue) 
-            });
-            
-        } else {
-            
-            setLoadingStatus({ 
-                isLoading: true, 
-                serviceMethod: boredApiService[customSetting](value) 
-            });
-   
+        if (value !== undefined) {
+            setState({ ...state, isLoading: true, serviceMethod: boredApiService[customSetting](value) });
         }
 
+        if ((lowerValue !== undefined) && (higherValue !== undefined)) {
+            setState({ ...state, isLoading: true, serviceMethod: boredApiService[customSetting](lowerValue, higherValue) });
+        }
     }
 
-    let result = '';
+    const addActivityToArchive = () => {
+        if (state.data !== undefined) {
+            const key = state.data.key;
+            const inArray = archiveState.activities.find((currentValue) => {
+                return currentValue.key === key;
+            })
 
-    if (loadingStatus.isLoading) {
-        result = <Spinner />;
-    } else {
-        result = (loadingStatus.isActivityExists) ? <ShowLoadedActivity loadedActivity={loadingStatus.data} /> : <ShowNoSuchActivityMessage />;
-        if(loadingStatus.noServerReply) result = <ShowNoServerReplyMessage />;
+            if (inArray === undefined) {
+                archiveDispatch(archiveNewActivity(state.data));
+                setState({ ...state, isArchiveAdding: true, archiveAddingResultMessage: 'The activity has been added to the archive' });
+            } else {
+                setState({ ...state, isArchiveAdding: true, archiveAddingResultMessage: 'Such activity is in the archive already' });
+            }
+        }
     }
-        
+
+    const loadingResult = () => {
+        let result = '';
+
+        if (state.isLoading) {
+            result = <Spinner />;
+        } else {
+            result = (state.isActivityExists) ? <ShowLoadedActivity loadedActivity={state.data} /> : <ShowNoSuchActivityMessage />;
+            if (state.noServerReply) result = <ShowNoServerReplyMessage />;
+        }
+
+        return result;
+    }
+
+    const closeModalWindow = () => {
+        setState({ ...state, isArchiveAdding: false });
+    }
+
+    const showModalWindow = () => {
+        let archiveAddingResultMessage = '';
+
+        if (state.isArchiveAdding) {
+            archiveAddingResultMessage = <ModalWindow width="400" height="200" measureType="px" content={state.archiveAddingResultMessage} onWindowHide={closeModalWindow} />;
+        }
+
+        return archiveAddingResultMessage;
+    }
+
     return (
         <div>
             <ResultContainer>
-                {result}
+                {loadingResult()}
             </ResultContainer>
             <ResultButtonsContainer>
-                <ResultButton onClick={getRandomActivity}>Random activity</ResultButton>
-                <ResultButton onClick={getCustomActivity}>Custom activity</ResultButton>
-                <ResultButton>Archive activity</ResultButton>
+                <ResultButton onClick={getActivity}>Random activity</ResultButton>
+                <ResultButton onClick={getActivity}>Custom activity</ResultButton>
+                <ResultButton onClick={addActivityToArchive} disabled={!state.isActivityExists} >Archive activity</ResultButton>
+                {showModalWindow()}
             </ResultButtonsContainer>
         </div>
     );
@@ -203,12 +189,16 @@ const ResultButton = styled.button`
     color: #fff;
     border-radius: 7px;
     width: 200px;
-    cursor: pointer;
     outline: none;
 
-    :hover {
+    :hover:enabled {
         font-weight: bold;
         background-color: black;
+        cursor: pointer;
+    }
+
+    :disabled {
+        opacity: 0.5;
     }
 
 `;
