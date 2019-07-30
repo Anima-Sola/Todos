@@ -1,6 +1,9 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 import StoreContext from '../../store-context';
+import star from './star.png';
+import solidstar from './solidstar.png';
+import busket from './busket.png';
 
 const Archive = () => {
     const { archiveState } = useContext(StoreContext);
@@ -17,8 +20,13 @@ const Archive = () => {
 
             return (
                 <ArchiveItem key={key}>
-                    <ArchiveItemTitle>{activity}</ArchiveItemTitle>
-                    <ArchiveItemParameters>{parameters}</ArchiveItemParameters>
+                    <ArchiveData>
+                        <ArchiveItemTitle>{activity}</ArchiveItemTitle>
+                        <ArchiveItemParameters>{parameters}</ArchiveItemParameters>
+                    </ArchiveData>
+
+                    <SolidStar />
+                    <Busket />
                 </ArchiveItem>
             );
         })
@@ -50,8 +58,15 @@ const ArchiveTitle = styled.span`
 const ArchiveItem = styled.div`
     width: 100%;
     border-bottom: 1px dashed #fff;
-    //margin: 10px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
     padding: 10px;
+`;
+
+const ArchiveData = styled.div`
+    width: calc(100% - 140px);
 `;
 
 const ArchiveItemTitle = styled.div`
@@ -65,6 +80,24 @@ const ArchiveItemParameters = styled.div`
     font-family: 'Nunito Sans', sans-serif;
     font-size: 15px;
     margin-top: 10px;
+`;
+
+const Star = styled.div`
+    width: 70px;
+    height: 70px
+    background: url(${star}) no-repeat;
+`;
+
+const SolidStar = styled.div`
+    width: 70px;
+    height: 70px
+    background: url(${solidstar}) no-repeat;
+`;
+
+const Busket = styled.div`
+    width: 70px;
+    height: 70px;
+    background: url(${busket}) no-repeat;
 `;
 
 export default Archive;

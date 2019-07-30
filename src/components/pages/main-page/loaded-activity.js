@@ -8,10 +8,14 @@ import { archiveNewActivity } from '../../../actions';
 
 const boredApiService = new BoredApiService();
 
+const ShowResultInfo = ({ info }) => {
+    return (<ResultInfo>{info}</ResultInfo>);
+}
+
 const ShowLoadedActivity = ({ loadedActivity }) => {
     return (
         <div>
-            <LoadedActivity>{loadedActivity.activity}</LoadedActivity>
+            <ShowResultInfo info={loadedActivity.activity} />
             <ActivityDetails>
                 <span>Accessibility: {loadedActivity.accessibility}</span>
                 <span>Participants: {loadedActivity.participants}</span>
@@ -20,14 +24,6 @@ const ShowLoadedActivity = ({ loadedActivity }) => {
             </ActivityDetails>
         </div>
     );
-}
-
-const ShowNoSuchActivityMessage = () => {
-    return (<LoadedActivity>No activities found with the specified parameters</LoadedActivity>);
-}
-
-const ShowNoServerReplyMessage = () => {
-    return (<LoadedActivity>Sorry, but the server doesn't respond</LoadedActivity>);
 }
 
 const LoadedActivityContainer = () => {
@@ -59,10 +55,12 @@ const LoadedActivityContainer = () => {
         }
     });
 
-    const getActivity = () => {
-        const { value, lowerValue, higherValue, customSetting } = activities[selectedActivityId];
-
+    const getRandomActivity = () => {
         setState({ ...state, isLoading: true, serviceMethod: boredApiService.getRandomActivity() });
+    }
+
+    const getCustomActivity = () => {
+        const { value, lowerValue, higherValue, customSetting } = activities[selectedActivityId];
 
         if (value !== undefined) {
             setState({ ...state, isLoading: true, serviceMethod: boredApiService[customSetting](value) });
@@ -90,16 +88,10 @@ const LoadedActivityContainer = () => {
     }
 
     const loadingResult = () => {
-        let result = '';
-
-        if (state.isLoading) {
-            result = <Spinner />;
-        } else {
-            result = (state.isActivityExists) ? <ShowLoadedActivity loadedActivity={state.data} /> : <ShowNoSuchActivityMessage />;
-            if (state.noServerReply) result = <ShowNoServerReplyMessage />;
-        }
-
-        return result;
+        if (state.isLoading) return <Spinner />;
+        if (state.noServerReply) return <ShowResultInfo info="Sorry, but the server doesn't respond" />;
+        if (state.isActivityExists) return <ShowLoadedActivity loadedActivity={state.data} />;
+        return <ShowResultInfo info="No activities found with the specified parameters" />;
     }
 
     const closeModalWindow = () => {
@@ -107,13 +99,12 @@ const LoadedActivityContainer = () => {
     }
 
     const showModalWindow = () => {
-        let archiveAddingResultMessage = '';
 
         if (state.isArchiveAdding) {
-            archiveAddingResultMessage = <ModalWindow width="400" height="200" measureType="px" content={state.archiveAddingResultMessage} onWindowHide={closeModalWindow} />;
+            return <ModalWindow width="400" height="200" measureType="px" content={state.archiveAddingResultMessage} onWindowHide={closeModalWindow} />;
         }
 
-        return archiveAddingResultMessage;
+        return '';
     }
 
     return (
@@ -122,8 +113,8 @@ const LoadedActivityContainer = () => {
                 {loadingResult()}
             </ResultContainer>
             <ResultButtonsContainer>
-                <ResultButton onClick={getActivity}>Random activity</ResultButton>
-                <ResultButton onClick={getActivity}>Custom activity</ResultButton>
+                <ResultButton onClick={getRandomActivity}>Random activity</ResultButton>
+                <ResultButton onClick={getCustomActivity}>Custom activity</ResultButton>
                 <ResultButton onClick={addActivityToArchive} disabled={!state.isActivityExists} >Archive activity</ResultButton>
                 {showModalWindow()}
             </ResultButtonsContainer>
@@ -144,7 +135,7 @@ const ResultContainer = styled.div`
     }
 `;
 
-const LoadedActivity = styled.span`
+const ResultInfo = styled.span`
     font-family: 'Nunito Sans', sans-serif;
     color: #fff;
     font-size: 40px;
