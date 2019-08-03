@@ -11,7 +11,12 @@ import {
         decHigherValueAction
     } from './custom-settings-actions';
 
-import archiveNewActivity from './archive-actions';
+import {
+    archiveNewActivityAction,
+    makeActivityFavouriteAction,
+    makeActivityNonFavouriteAction,
+    removeActivityAction
+} from './archive-actions';
 
 export {
     setActiveMainMenuItem,
@@ -23,5 +28,8 @@ export {
     decLowerValueAction,
     incHigherValueAction,
     decHigherValueAction,
-    archiveNewActivity
+    archiveNewActivityAction,
+    makeActivityFavouriteAction,
+    makeActivityNonFavouriteAction,
+    removeActivityAction
 };

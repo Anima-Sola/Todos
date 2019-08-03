@@ -1,45 +1,65 @@
-import React, { useContext } from 'react';
+import React, { useState,  useContext } from 'react';
 import styled from 'styled-components';
 import StoreContext from '../../store-context';
 import star from './star.png';
 import solidstar from './solidstar.png';
 import busket from './busket.png';
+import { 
+    makeActivityFavouriteAction,
+    makeActivityNonFavouriteAction,
+    removeActivityAction
+} from '../../../actions';
 
 const Archive = () => {
-    const { archiveState } = useContext(StoreContext);
-    const { activities } = archiveState;
+    const { archiveState, archiveDispatch } = useContext(StoreContext);
+    const activities = archiveState.activities;
+    const [ list, updateList ] = useState(0);
 
-
-    const showActivities = () => {
-
-        const styledActivities = activities.map( (value) => {
-
-            const { accessibility, activity, key, participants, price, type } = value;
-
-            const parameters = `Accessibility: ${accessibility} Participants: ${participants} Price: ${price} Type: ${type}`;
-
-            return (
-                <ArchiveItem key={key}>
-                    <ArchiveData>
-                        <ArchiveItemTitle>{activity}</ArchiveItemTitle>
-                        <ArchiveItemParameters>{parameters}</ArchiveItemParameters>
-                    </ArchiveData>
-
-                    <SolidStar />
-                    <Busket />
-                </ArchiveItem>
-            );
-        })
-
-        return styledActivities;
-
+    const makeActivityFavourite = (key) => {
+        console.log('1');
+        archiveDispatch(makeActivityFavouriteAction(key));
+        localStorage.setItem('archiveState', JSON.stringify(archiveState));
+        updateList(list + 1);
     }
+
+    const makeActivityNonFavourite = (key) => {
+        archiveDispatch(makeActivityNonFavouriteAction(key));
+        localStorage.setItem('archiveState', JSON.stringify(archiveState));
+        updateList(list - 1);
+    }
+
+    const removeActivity = (key) => {
+        archiveDispatch(removeActivityAction(key));
+        localStorage.setItem('archiveState', JSON.stringify(archiveState));
+        updateList(list + 1);
+    }
+
+    const styledActivities = activities.map( (value) => {
+        const { accessibility, activity, key, participants, price, type, isFavourite } = value;
+        const parameters = `Accessibility: ${accessibility} Participants: ${participants} Price: ${price} Type: ${type}`;
+        const bold = (isFavourite) ? { fontWeight: 'bold' } : {};
+        const star = (isFavourite) ? 
+            <SolidStar title="Make activity non favourite" onClick={() => makeActivityNonFavourite(key)} /> : 
+            <Star title="Make activity favourite" onClick={() => makeActivityFavourite(key)}/>
+
+        return (
+            <ArchiveItem key={key}>
+                <ArchiveData>
+                    <ArchiveItemTitle style={bold} >{activity}</ArchiveItemTitle>
+                    <ArchiveItemParameters>{parameters}</ArchiveItemParameters>
+                </ArchiveData>
+
+                {star}
+                <Busket title="Remove activity" onClick={() => removeActivity(key)}/>
+            </ArchiveItem>
+        );
+    })
 
     return (
         <div>
             <ArchiveTitle>Archive of activities</ArchiveTitle>
             <div>
-                {showActivities()}
+                {styledActivities}
             </div>
         </div>
     );
@@ -86,18 +106,21 @@ const Star = styled.div`
     width: 70px;
     height: 70px
     background: url(${star}) no-repeat;
+    cursor: pointer;
 `;
 
 const SolidStar = styled.div`
     width: 70px;
     height: 70px
     background: url(${solidstar}) no-repeat;
+    cursor: pointer;
 `;
 
 const Busket = styled.div`
     width: 70px;
     height: 70px;
     background: url(${busket}) no-repeat;
+    cursor: pointer;
 `;
 
 export default Archive;

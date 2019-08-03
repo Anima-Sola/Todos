@@ -4,7 +4,7 @@ import StoreContext from '../../store-context';
 import Spinner from '../../spinner';
 import ModalWindow from '../../modal-window';
 import BoredApiService from '../../../services/bored-api-service';
-import { archiveNewActivity } from '../../../actions';
+import { archiveNewActivityAction } from '../../../actions';
 
 const boredApiService = new BoredApiService();
 
@@ -79,7 +79,7 @@ const LoadedActivityContainer = () => {
             })
 
             if (inArray === undefined) {
-                archiveDispatch(archiveNewActivity(state.data));
+                archiveDispatch(archiveNewActivityAction(state.data));
                 setState({ ...state, isArchiveAdding: true, archiveAddingResultMessage: 'The activity has been added to the archive' });
             } else {
                 setState({ ...state, isArchiveAdding: true, archiveAddingResultMessage: 'Such activity is in the archive already' });
