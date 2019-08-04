@@ -12,26 +12,28 @@ import {
 
 const Archive = () => {
     const { archiveState, archiveDispatch } = useContext(StoreContext);
-    const activities = archiveState.activities;
-    const [ list, updateList ] = useState(0);
+    let [ activities, updateActivitiesList ] = useState(archiveState.activities);
 
     const makeActivityFavourite = (key) => {
-        console.log('1');
         archiveDispatch(makeActivityFavouriteAction(key));
         localStorage.setItem('archiveState', JSON.stringify(archiveState));
-        updateList(list + 1);
+        activities = [...archiveState.activities];
+        updateActivitiesList(activities);
+        
     }
 
     const makeActivityNonFavourite = (key) => {
         archiveDispatch(makeActivityNonFavouriteAction(key));
         localStorage.setItem('archiveState', JSON.stringify(archiveState));
-        updateList(list - 1);
+        activities = [...archiveState.activities];
+        updateActivitiesList(activities);
     }
 
     const removeActivity = (key) => {
         archiveDispatch(removeActivityAction(key));
         localStorage.setItem('archiveState', JSON.stringify(archiveState));
-        updateList(list + 1);
+        activities = [...archiveState.activities];
+        updateActivitiesList(activities);
     }
 
     const styledActivities = activities.map( (value) => {
