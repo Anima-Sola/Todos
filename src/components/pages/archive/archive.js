@@ -5,8 +5,7 @@ import star from './star.png';
 import solidstar from './solidstar.png';
 import busket from './busket.png';
 import { 
-    makeActivityFavouriteAction,
-    makeActivityNonFavouriteAction,
+    toggleFavouriteActivityAction,
     removeActivityAction
 } from '../../../actions';
 
@@ -14,23 +13,8 @@ const Archive = () => {
     const { archiveState, archiveDispatch } = useContext(StoreContext);
     let [ activities, updateActivitiesList ] = useState(archiveState.activities);
 
-    const makeActivityFavourite = (key) => {
-        archiveDispatch(makeActivityFavouriteAction(key));
-        localStorage.setItem('archiveState', JSON.stringify(archiveState));
-        activities = [...archiveState.activities];
-        updateActivitiesList(activities);
-        
-    }
-
-    const makeActivityNonFavourite = (key) => {
-        archiveDispatch(makeActivityNonFavouriteAction(key));
-        localStorage.setItem('archiveState', JSON.stringify(archiveState));
-        activities = [...archiveState.activities];
-        updateActivitiesList(activities);
-    }
-
-    const removeActivity = (key) => {
-        archiveDispatch(removeActivityAction(key));
+    const doAction = (key, action) => {
+        archiveDispatch(action(key));
         localStorage.setItem('archiveState', JSON.stringify(archiveState));
         activities = [...archiveState.activities];
         updateActivitiesList(activities);
@@ -41,8 +25,8 @@ const Archive = () => {
         const parameters = `Accessibility: ${accessibility} Participants: ${participants} Price: ${price} Type: ${type}`;
         const bold = (isFavourite) ? { fontWeight: 'bold' } : {};
         const star = (isFavourite) ? 
-            <SolidStar title="Make activity non favourite" onClick={() => makeActivityNonFavourite(key)} /> : 
-            <Star title="Make activity favourite" onClick={() => makeActivityFavourite(key)}/>
+            <SolidStar title="Make activity non favourite" onClick={() => doAction(key, toggleFavouriteActivityAction)} /> : 
+            <Star title="Make activity favourite" onClick={() => doAction(key, toggleFavouriteActivityAction)}/>
 
         return (
             <ArchiveItem key={key}>
@@ -52,7 +36,7 @@ const Archive = () => {
                 </ArchiveData>
 
                 {star}
-                <Busket title="Remove activity" onClick={() => removeActivity(key)}/>
+                <Busket title="Remove activity" onClick={() => doAction(key, removeActivityAction)}/>
             </ArchiveItem>
         );
     })
@@ -60,9 +44,9 @@ const Archive = () => {
     return (
         <div>
             <ArchiveTitle>Archive of activities</ArchiveTitle>
-            <div>
+            <ActivitiesContainer>
                 {styledActivities}
-            </div>
+            </ActivitiesContainer>
         </div>
     );
 }
@@ -75,6 +59,11 @@ const ArchiveTitle = styled.span`
     font-size: 35px;
     display: block;
     margin: 10px 0;
+`;
+
+const ActivitiesContainer = styled.div`
+    margin-bottom: 20px;
+    //border-bottom: 1px dashed #fff;
 `;
 
 const ArchiveItem = styled.div`

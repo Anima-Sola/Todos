@@ -13,8 +13,7 @@ import {
 
 import {
     archiveNewActivityAction,
-    makeActivityFavouriteAction,
-    makeActivityNonFavouriteAction,
+    toggleFavouriteActivityAction,
     removeActivityAction
 } from './archive-actions';
 
@@ -29,7 +28,6 @@ export {
     incHigherValueAction,
     decHigherValueAction,
     archiveNewActivityAction,
-    makeActivityFavouriteAction,
-    makeActivityNonFavouriteAction,
+    toggleFavouriteActivityAction,
     removeActivityAction
 };

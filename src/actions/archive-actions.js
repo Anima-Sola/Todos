@@ -5,16 +5,9 @@ const archiveNewActivityAction = (activity) => {
     };
 };
 
-const makeActivityFavouriteAction = (key) => {
+const toggleFavouriteActivityAction = (key) => {
     return {
-        type: 'MAKE_ACTIVITY_FAVOURITE',
-        payload: key
-    }
-}
-
-const makeActivityNonFavouriteAction = (key) => {
-    return {
-        type: 'MAKE_ACTIVITY_NON_FAVOURITE',
+        type: 'TOGGLE_FAVOURITE_ACTIVITY',
         payload: key
     }
 }
@@ -28,7 +21,6 @@ const removeActivityAction = (key) => {
 
 export {
     archiveNewActivityAction,
-    makeActivityFavouriteAction,
-    makeActivityNonFavouriteAction,
+    toggleFavouriteActivityAction,
     removeActivityAction
 }

@@ -206,7 +206,6 @@ const CustomSettingsItemBorderBottomRight = styled.div`
 
 `;
 
-
 const CustomSettingsItemBorderRight = styled.div`
     border-right: 1px dashed #fff;
 

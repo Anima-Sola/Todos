@@ -17,7 +17,7 @@ const findActivityIndexByKey = (state, key) => {
     return activityIndex;
 }
 
-const isFavouriteReverse = (state, key) => {
+const toggleFavouriteActivity = (state, key) => {
     const activityIndex = findActivityIndexByKey(state, key);
 
     if(activityIndex !== undefined) {
@@ -45,11 +45,8 @@ const updateArchiveReducer = (state = archiveInitialState, action) => {
             state.activities.push(action.payload);
             return state;
 
-        case 'MAKE_ACTIVITY_FAVOURITE':
-            return isFavouriteReverse(state, action.payload);
-
-        case 'MAKE_ACTIVITY_NON_FAVOURITE':
-            return isFavouriteReverse(state, action.payload);
+        case 'TOGGLE_FAVOURITE_ACTIVITY':
+            return toggleFavouriteActivity(state, action.payload);
 
         case 'REMOVE_ACTIVITY':
             return removeActivity(state, action.payload);
