@@ -1,5 +1,3 @@
-import setActiveMainMenuItem from './main-menu-actions';
-
 import {     
         setSelectedTypeOfAction,
         setSelectedCustomActivity,
@@ -18,7 +16,6 @@ import {
 } from './archive-actions';
 
 export {
-    setActiveMainMenuItem,
     setSelectedTypeOfAction,
     setSelectedCustomActivity,
     incValueAction,

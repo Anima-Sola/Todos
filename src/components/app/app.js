@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import StoreContext from '../store-context';
 import { 
-    mainMenuInitialState, 
-    updateMainMenuReducer, 
     customSettingsInitialState, 
     updateCustomSettingsReducer, 
     archiveInitialState, 
@@ -19,20 +17,18 @@ import AboutPage from '../pages/about-page/about-page';
 import Page404 from '../pages/page-404/page-404';
 
 const App = () => {
-  const [ mainMenuState, mainMenuDispatch ] = useReducer(updateMainMenuReducer, mainMenuInitialState);
   const [ customSettingsState, customSettingsDispatch ] = useReducer(updateCustomSettingsReducer, customSettingsInitialState);
   const [ archiveState, archiveDispatch ] = useReducer(updateArchiveReducer, archiveInitialState);
 
   useEffect(() => {
 
-    localStorage.setItem('mainMenuState', JSON.stringify(mainMenuState)); 
-    localStorage.setItem('customSettingsState', JSON.stringify(customSettingsState));
-    localStorage.setItem('archiveState', JSON.stringify(archiveState));
+      localStorage.setItem('customSettingsState', JSON.stringify(customSettingsState));
+      localStorage.setItem('archiveState', JSON.stringify(archiveState));
 
   });
 
   return (
-    <StoreContext.Provider value={{ mainMenuDispatch, mainMenuState, customSettingsState, customSettingsDispatch, archiveState, archiveDispatch }}>
+    <StoreContext.Provider value={{ customSettingsState, customSettingsDispatch, archiveState, archiveDispatch }}>
       <Router>
         <Main>
             <Header />

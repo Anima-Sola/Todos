@@ -80,6 +80,7 @@ const LoadedActivityContainer = () => {
 
             if (inArray === undefined) {
                 archiveDispatch(archiveNewActivityAction(state.data));
+                localStorage.setItem('archiveState', JSON.stringify(archiveState));
                 setState({ ...state, isArchiveAdding: true, archiveAddingResultMessage: 'The activity has been added to the archive' });
             } else {
                 setState({ ...state, isArchiveAdding: true, archiveAddingResultMessage: 'Such activity is in the archive already' });

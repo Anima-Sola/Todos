@@ -11,19 +11,21 @@ import {
 
 const Archive = () => {
     const { archiveState, archiveDispatch } = useContext(StoreContext);
-    let [ activities, updateActivitiesList ] = useState(archiveState.activities);
+    let activities = archiveState.activities;
+    let [ forUpdatingFlag, updateComponent ] = useState(false);
+
+    if(activities.length === 0) return <H1>There are no activities in the list.</H1>;
 
     const doAction = (key, action) => {
         archiveDispatch(action(key));
         localStorage.setItem('archiveState', JSON.stringify(archiveState));
-        activities = [...archiveState.activities];
-        updateActivitiesList(activities);
+        updateComponent(!forUpdatingFlag);
     }
 
     const styledActivities = activities.map( (value) => {
         const { accessibility, activity, key, participants, price, type, isFavourite } = value;
         const parameters = `Accessibility: ${accessibility} Participants: ${participants} Price: ${price} Type: ${type}`;
-        const bold = (isFavourite) ? { fontWeight: 'bold' } : {};
+        const bold = (isFavourite) ? { fontWeight: 'bold', fontStyle: 'italic' } : {};
         const star = (isFavourite) ? 
             <SolidStar title="Make activity non favourite" onClick={() => doAction(key, toggleFavouriteActivityAction)} /> : 
             <Star title="Make activity favourite" onClick={() => doAction(key, toggleFavouriteActivityAction)}/>
@@ -31,7 +33,7 @@ const Archive = () => {
         return (
             <ArchiveItem key={key}>
                 <ArchiveData>
-                    <ArchiveItemTitle style={bold} >{activity}</ArchiveItemTitle>
+                    <ArchiveItemTitle style={bold} onClick={() => doAction(key, toggleFavouriteActivityAction)} >{activity}</ArchiveItemTitle>
                     <ArchiveItemParameters>{parameters}</ArchiveItemParameters>
                 </ArchiveData>
 
@@ -49,7 +51,29 @@ const Archive = () => {
             </ActivitiesContainer>
         </div>
     );
+
 }
+
+const H1 = styled.h1`
+    margin-top: 250px;
+    text-align: center;
+    color: #fff;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 50px;
+
+    @media (max-width: 992px) {
+        font-size: 40px; 
+    }
+
+    @media (max-width: 768px) {
+        font-size: 33px;
+    }
+
+    @media (max-width: 576px) {
+        font-size: 25px; 
+    } 
+
+`;
 
 const ArchiveTitle = styled.span`
     width: 100%;
@@ -63,7 +87,6 @@ const ArchiveTitle = styled.span`
 
 const ActivitiesContainer = styled.div`
     margin-bottom: 20px;
-    //border-bottom: 1px dashed #fff;
 `;
 
 const ArchiveItem = styled.div`
@@ -74,6 +97,10 @@ const ArchiveItem = styled.div`
     justify-content: center;
     align-items: center;
     padding: 10px;
+
+    @media (max-width: 768px) {
+        padding: 5px 10px;
+    }
 `;
 
 const ArchiveData = styled.div`
@@ -84,6 +111,11 @@ const ArchiveItemTitle = styled.div`
     color: #fff;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 27px;
+    cursor: pointer;
+
+    @media (max-width: 768px) {
+        font-size: 22px;
+    }
 `;
 
 const ArchiveItemParameters = styled.div`
@@ -91,6 +123,15 @@ const ArchiveItemParameters = styled.div`
     font-family: 'Nunito Sans', sans-serif;
     font-size: 15px;
     margin-top: 10px;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
+
+    @media (max-width: 576px) {
+        font-size: 9px; 
+    } 
+
 `;
 
 const Star = styled.div`

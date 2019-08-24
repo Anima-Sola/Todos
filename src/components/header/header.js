@@ -1,20 +1,47 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import StoreContext from '../store-context';
-import { setActiveMainMenuItem } from '../../actions';
+
+const mainMenuItems = {
+    items: [
+      {
+        id: 0,
+        title: 'Find Activity',
+        link: '/'
+      },
+      {
+        id: 1,
+        title: 'Archive',
+        link: '/archive'
+      },
+      {
+        id: 2,
+        title: 'About',
+        link: '/about'
+      }
+    ]
+};
+
+const getActiveMenuItemLink = () => {
+    const url = window.location.href;
+    const urlParts = url.split('/');
+    const link = '/' + urlParts[ urlParts.length - 1 ];
+
+    return link;
+}
 
 const Header = () => {
-    const { mainMenuState, mainMenuDispatch } = useContext(StoreContext);
-  
-    const styledItems = mainMenuState.items.map(
+    let [ forUpdatingFlag, updateComponent ] = useState(false);
+    const activeMenuItemLink = getActiveMenuItemLink();
+
+    const styledItems = mainMenuItems.items.map(
     
         (item) => {
             const { id, title, link } = item;
-            const isSelectedStyles = (mainMenuState.selectedItemId === id) ? {fontWeight: 600, color: '#fff'} : {};
+            const isSelectedStyles = (link === activeMenuItemLink) ? {fontWeight: 600, color: '#fff'} : {};
             return (
                 <MainMenuItem key={id}>
-                    <Link to={link} style={isSelectedStyles} onClick={() => mainMenuDispatch(setActiveMainMenuItem(id))}>{title}</Link>
+                    <Link to={link} style={isSelectedStyles} onClick={() => updateComponent(!forUpdatingFlag)} >{title}</Link>
                 </MainMenuItem>
             );
         }
@@ -25,7 +52,7 @@ const Header = () => {
         <HeaderContainer>
             <LogoContainer>
                 <Logo>
-                    <Link to="/">WhatToD&#216;?</Link>
+                    <Link to="/" onClick={() => updateComponent(!forUpdatingFlag)} >WhatToD&#216;?</Link>
                 </Logo>
             </LogoContainer>
             <MainMenuContainer>
