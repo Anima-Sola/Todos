@@ -8,10 +8,12 @@ import { archiveNewActivityAction } from '../../../actions';
 
 const boredApiService = new BoredApiService();
 
+//Shows result of loading activity from server
 const ShowResultInfo = ({ info }) => {
     return (<ResultInfo>{info}</ResultInfo>);
 }
 
+//Shows loaded activity
 const ShowLoadedActivity = ({ loadedActivity }) => {
     return (
         <div>
@@ -26,8 +28,9 @@ const ShowLoadedActivity = ({ loadedActivity }) => {
     );
 }
 
+//The component which loads activities from server
 const LoadedActivityContainer = () => {
-    const [state, setState] = useState({
+    const [state, setState] = useState({  //state of the component
         isLoading: true,
         isActivityExists: false,
         noServerReply: false,
@@ -88,6 +91,7 @@ const LoadedActivityContainer = () => {
         }
     }
 
+    //Shows result
     const loadingResult = () => {
         if (state.isLoading) return <Spinner />;
         if (state.noServerReply) return <ShowResultInfo info="Sorry, but the server doesn't respond" />;

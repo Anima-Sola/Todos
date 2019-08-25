@@ -9,6 +9,7 @@ import {
     removeActivityAction
 } from '../../../actions';
 
+//The component works with archive - it makes activity favourite/non favourite, removes activities, changes state
 const Archive = () => {
     const { archiveState, archiveDispatch } = useContext(StoreContext);
     let activities = archiveState.activities;
@@ -91,7 +92,6 @@ const ActivitiesContainer = styled.div`
 
 const ArchiveItem = styled.div`
     width: 100%;
-    border-bottom: 1px dashed #fff;
     display: flex;
     flex-direction: row;
     justify-content: center;

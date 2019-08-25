@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+//The position in the middle of screen vertically and horizontally
 const ModalWindow = ({ width, height, measureType, content, onWindowHide }) => {
 
   const getCenterWindowStyles = (width, height, measureType) => {

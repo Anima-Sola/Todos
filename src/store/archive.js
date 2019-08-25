@@ -1,3 +1,7 @@
+/*
+    Archive state.
+    The initial state is loaded from the local storage. If the local storage is empty, the activity list is empty.
+*/
 let archiveInitialState = JSON.parse(localStorage.getItem('archiveState'));
 
 if(archiveInitialState === null) {
@@ -17,6 +21,7 @@ const findActivityIndexByKey = (state, key) => {
     return activityIndex;
 }
 
+//Makes activity favourite/non favourite
 const toggleFavouriteActivity = (state, key) => {
     const activityIndex = findActivityIndexByKey(state, key);
 
@@ -37,6 +42,7 @@ const removeActivity = (state, key) => {
     return state;
 }
 
+//Reducer
 const updateArchiveReducer = (state = archiveInitialState, action) => {
 
     switch (action.type) {

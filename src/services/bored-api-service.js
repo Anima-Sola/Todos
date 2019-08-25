@@ -1,3 +1,6 @@
+/*
+    The class for getting data from BoredAPI.
+*/
 export default class BoredApiService {
 
     _apiBase = "http://www.boredapi.com/api";
@@ -15,6 +18,7 @@ export default class BoredApiService {
         return await this.getResource(`/activity/`);
     }
 
+    //Not used
     getActivityByKey = async (key) => {
         return await this.getResource(`/activity?key=${key}`);
     }

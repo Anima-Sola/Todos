@@ -5,16 +5,17 @@ import tick from './tick.png';
 import plus from './plus.png';
 import minus from './minus.png';
 import { 
-        setSelectedTypeOfAction,
-        setSelectedCustomActivity,
-        incValueAction,
-        decValueAction,
-        incLowerValueAction,
-        decLowerValueAction,
-        incHigherValueAction,
-        decHigherValueAction
-    } from '../../../actions';
+    setSelectedTypeOfAction,
+    setSelectedCustomActivity,
+    incValueAction,
+    decValueAction,
+    incLowerValueAction,
+    decLowerValueAction,
+    incHigherValueAction,
+    decHigherValueAction
+} from '../../../actions';
 
+//The component which handles events on Select element and changes state
 const SelectSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities, activityTypes } = customSettingsState;
@@ -30,18 +31,18 @@ const SelectSetting = ({ activityId }) => {
         });
     }
     
+    const doAction = (action) => {
+        customSettingsDispatch(action(activityId));
+    }
+
     const setSelectedType = () => {
         const select = document.getElementById('activity_type_select');
         customSettingsDispatch(setSelectedTypeOfAction(select.value));
     }
     
-    const setCustomActivity = () => {
-        customSettingsDispatch(setSelectedCustomActivity(activityId));
-    }
-    
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} readOnly />
+            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={() => doAction(setSelectedCustomActivity)} checked={isChecked} readOnly />
             <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
             <Select disabled={!isChecked} id="activity_type_select" onChange={setSelectedType} value={value}>
                 {getActivityTypeList()}
@@ -50,6 +51,7 @@ const SelectSetting = ({ activityId }) => {
     );
 }
 
+//The component which handles events on single value block and changes state
 const SingleValueSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
@@ -58,31 +60,24 @@ const SingleValueSetting = ({ activityId }) => {
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? { opacity: 1 } : {};
 
-    const setCustomActivity = () => {
-        customSettingsDispatch(setSelectedCustomActivity(activityId));
-    }
-
-    const incValue = () => {
-        customSettingsDispatch(incValueAction(activityId));
-    }
-
-    const decValue = () => {
-        customSettingsDispatch(decValueAction(activityId));
+    const doActivity = (activity) => {
+        customSettingsDispatch(activity(activityId));
     }
 
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} readOnly />
+            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={() => doActivity(setSelectedCustomActivity)} checked={isChecked} readOnly />
             <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
-                <ValueButton onClick={decValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
+                <ValueButton onClick={() => doActivity(decValueAction)} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
                 <Value>{ value }</Value>
-                <ValueButton onClick={incValue} disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
+                <ValueButton onClick={() => doActivity(incValueAction)} disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
             </ValueContainer>
         </CustomSettingsItem>
     );   
 }
 
+//The component which handles events on range value block and changes state
 const RangeValuesSetting = ({ activityId }) => {
     const { customSettingsState, customSettingsDispatch } = useContext(StoreContext);
     const { selectedActivityId, activities } = customSettingsState;
@@ -90,38 +85,22 @@ const RangeValuesSetting = ({ activityId }) => {
 
     const isChecked = (selectedActivityId === activityId);
     const opacity = isChecked ? { opacity: 1 } : {};
+
+    const doAction = (action) => {
+        customSettingsDispatch(action(activityId));
+    }
     
-    const setCustomActivity = () => {
-        customSettingsDispatch(setSelectedCustomActivity(activityId));
-    }
-
-    const incLowerValue = () => {
-        customSettingsDispatch(incLowerValueAction(activityId));
-    }
-
-    const decLowerValue = () => {
-        customSettingsDispatch(decLowerValueAction(activityId));
-    }
-
-    const incHigherValue = () => {
-        customSettingsDispatch(incHigherValueAction(activityId));
-    }
-
-    const decHigherValue = () => {
-        customSettingsDispatch(decHigherValueAction(activityId));
-    }
-
     return (
         <CustomSettingsItem style={opacity}>
-            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={setCustomActivity} checked={isChecked} readOnly />
+            <RadioSwitcher id={customSetting} type="radio" name="setting" onClick={() => doAction(setSelectedCustomActivity)} checked={isChecked} readOnly />
             <label htmlFor={customSetting}><span></span>{CustomSettingTitle}</label>
             <ValueContainer>
-                <ValueButton onClick={decLowerValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
+                <ValueButton onClick={() => doAction(decLowerValueAction)} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
                 <Value>{ lowerValue }</Value>
-                <ValueButton onClick={incLowerValue } disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
-                <ValueButton onClick={decHigherValue} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
+                <ValueButton onClick={() => doAction(incLowerValueAction)} disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
+                <ValueButton onClick={() => doAction(decHigherValueAction)} disabled={!isChecked}><img src={minus} alt='minus' /></ValueButton>
                 <Value>{ higherValue }</Value>
-                <ValueButton onClick={incHigherValue} disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
+                <ValueButton onClick={() => doAction(incHigherValueAction)} disabled={!isChecked}><img src={plus} alt='plus' /></ValueButton>
             </ValueContainer>
         </CustomSettingsItem>
     );

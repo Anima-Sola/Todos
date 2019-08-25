@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import loading from './loading.gif';
 
+//It shows until receiving data from server
 const Spinner = () => {
     return (
         <div>

@@ -30,10 +30,12 @@ const getActiveMenuItemLink = () => {
     return link;
 }
 
+//The site header with main menu
 const Header = () => {
     let [ forUpdatingFlag, updateComponent ] = useState(false);
     const activeMenuItemLink = getActiveMenuItemLink();
 
+    //If url is the same as link the font is bold
     const styledItems = mainMenuItems.items.map(
     
         (item) => {

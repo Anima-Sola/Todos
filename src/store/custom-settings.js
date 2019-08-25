@@ -1,3 +1,8 @@
+/*
+    Custom settings reducer and state.
+    The initial state is loaded from the local storage. If the local storage is empty, the value of the initial state is assigned
+    from the Object below.
+*/
 let customSettingsInitialState = JSON.parse(localStorage.getItem('customSettingsState'));
 
 if(customSettingsInitialState === null) {
@@ -74,45 +79,51 @@ if(customSettingsInitialState === null) {
 
 }
 
+//Changes field 'value' in activity id = 0
 const updateTypeOfAction = (state, activityId) => {
     const activities = [...state.activities];
     activities[0].value = activityId;
     return { ...state, activities };
 }
 
-const updateValue = (max, min, step, value, direction) => {
+//Checks is it able to update value or not
+const canUpdateValue = (max, min, step, value, direction) => {
     const newValue = Math.round((value + direction * step) * 100) / 100;
     const canUpdate = (newValue >= min) && (newValue <= max);
     return canUpdate ? newValue : value;
 }
 
+//Updates single value activity id = 1, 3, 4
 const updateSingleValue = (state, activityId, direction) => {
     const activities = [...state.activities];
     const { max, min, step, value } = activities[activityId];
 
-    activities[activityId].value = updateValue( max, min, step, value, direction );
+    activities[activityId].value = canUpdateValue( max, min, step, value, direction );
 
     return { ...state, activities };
 };
 
+//Updates lower range value activity id = 2, 5
 const updateLowerRangeValue = (state, activityId, direction) => {
     const activities = [...state.activities];
     const { higherValue, lowerMin, step, lowerValue } = activities[activityId];
 
-    activities[activityId].lowerValue = updateValue( higherValue, lowerMin, step, lowerValue, direction );
+    activities[activityId].lowerValue = canUpdateValue( higherValue, lowerMin, step, lowerValue, direction );
 
     return { ...state, activities };
 };
 
+//Updates higher range value activity id = 2, 5
 const updateHigherRangeValue = (state, activityId, direction) => {
     const activities = [...state.activities];
     const { higherMax, lowerValue, step, higherValue } = activities[activityId];
 
-    activities[activityId].higherValue = updateValue( higherMax, lowerValue, step, higherValue, direction );
+    activities[activityId].higherValue = canUpdateValue( higherMax, lowerValue, step, higherValue, direction );
 
     return { ...state, activities };
 };
 
+//Custom settings reducer
 const updateCustomSettingsReducer = (state = customSettingsInitialState, action) => {
 
     switch (action.type) {
