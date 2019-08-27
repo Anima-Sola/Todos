@@ -152,6 +152,7 @@ const CustomSettingsContainer = styled.div`
     justify-content: center;
     align-items: center;
     user-select: none;
+    margin-bottom: 20px;
     
     @media (max-width: 576px) {
         display: block;

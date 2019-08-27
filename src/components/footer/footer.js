@@ -12,7 +12,6 @@ const Footer = () => {
 const FooterContainer = styled.footer`
     width: 100%;
     border-top: 1px solid #fff;
-    //background-color: #349AED;
     height: 60px;
     line-height: 60px;
     text-align: center;

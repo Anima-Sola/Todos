@@ -15,7 +15,7 @@ const Archive = () => {
     let activities = archiveState.activities;
     let [ forUpdatingFlag, updateComponent ] = useState(false);
 
-    if(activities.length === 0) return <H1>There are no activities in the list.</H1>;
+    if(activities.length === 0) return <NoActivitiesWarning><h1>There are no activities in the list.</h1></NoActivitiesWarning>;
 
     const doAction = (key, action) => {
         archiveDispatch(action(key));
@@ -55,25 +55,30 @@ const Archive = () => {
 
 }
 
-const H1 = styled.h1`
-    margin-top: 250px;
-    text-align: center;
-    color: #fff;
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 50px;
+const NoActivitiesWarning = styled.h1`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px);
 
-    @media (max-width: 992px) {
-        font-size: 40px; 
+    h1 {
+        color: #fff;
+        font-family: 'Nunito Sans', sans-serif;
+        font-size: 50px;
+
+        @media (max-width: 992px) {
+            font-size: 40px; 
+        }
+    
+        @media (max-width: 768px) {
+            font-size: 33px;
+        }
+    
+        @media (max-width: 576px) {
+            font-size: 25px; 
+        } 
     }
-
-    @media (max-width: 768px) {
-        font-size: 33px;
-    }
-
-    @media (max-width: 576px) {
-        font-size: 25px; 
-    } 
-
 `;
 
 const ArchiveTitle = styled.span`
